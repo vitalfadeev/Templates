@@ -93,20 +93,23 @@ LRESULT WindowProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam )
     {
         case WM_CREATE: return 0;
         case WM_PAINT:
-            InvalidateRect( hwnd, null, true );
+        {
             hdc = BeginPaint( hwnd, &ps );
             GetClientRect( hwnd, &rect ); 
             DrawText( hdc, "Hello!", -1, &rect, DT_SINGLELINE | DT_CENTER | DT_VCENTER );
             EndPaint( hwnd, &ps ) ;
             return 0;
+        }
         case WM_DESTROY: PostQuitMessage( 0 ); return 0;
         case WM_LBUTTONDOWN:
+        {
             InvalidateRect( hwnd, null, true );
             hdc = BeginPaint( hwnd, &ps );
             GetClientRect( hwnd, &rect );
             DrawText( hdc, "WM_LBUTTONDOWN", -1, &rect, DT_SINGLELINE | DT_CENTER | DT_VCENTER );
             EndPaint( hwnd, &ps );
             return 0;      
+        }
         case WM_LBUTTONUP: return 0;
         default:
     }
