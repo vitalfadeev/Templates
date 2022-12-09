@@ -48,8 +48,8 @@ int my_win_main( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, 
         throw new Exception( "Unable to register class" );
 
     // Create
-    HWND hWnd;
-    hWnd = CreateWindow(
+    HWND hwnd;
+    hwnd = CreateWindow(
         className,                        //Window class used.
         "The program".toUTF16z,           //Window caption.
         WS_OVERLAPPEDWINDOW,              //Window style.
@@ -63,9 +63,12 @@ int my_win_main( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, 
         null                              //Creation parameters.
     );                           
 
+    if ( hwnd == NULL )
+        throw new Exception( "Unable to create window" );
+
     // Show
-    ShowWindow( hWnd, iCmdShow );
-    UpdateWindow( hWnd ); 
+    ShowWindow( hwnd, iCmdShow );
+    UpdateWindow( hwnd ); 
 
     // Main loop
     MSG msg;
