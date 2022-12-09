@@ -5,46 +5,10 @@ import std.conv;
 import std.utf;
 
 
-extern( Windows ) nothrow 
-LRESULT WndProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam ) 
-{
-    HDC hdc;
-    PAINTSTRUCT ps; 
-    RECT rect;
-
-    switch( message ) 
-    {
-        case WM_CREATE: return 0;
-        case WM_PAINT:
-            InvalidateRect( hwnd, null, true );
-            hdc = BeginPaint( hwnd, &ps );
-            GetClientRect( hwnd, &rect ); 
-            DrawText( hdc, "Hello!", -1, &rect, DT_SINGLELINE | DT_CENTER | DT_VCENTER );
-            EndPaint( hwnd, &ps ) ;
-            return 0;
-        case WM_DESTROY: PostQuitMessage( 0 ); return 0;
-        case WM_LBUTTONUP: return 0;
-        case WM_LBUTTONDOWN:
-            InvalidateRect( hwnd, null, true );
-            hdc = BeginPaint( hwnd, &ps );
-            GetClientRect( hwnd, &rect );
-            DrawText( hdc, "WM_LBUTTONDOWN", -1, &rect, DT_SINGLELINE | DT_CENTER | DT_VCENTER );
-            EndPaint( hwnd, &ps );
-            return 0;      
-        default:
-            break;
-    }
-
-    return DefWindowProc( hwnd, message, wParam, lParam );
-}
-
-
-
 extern (Windows)
 LRESULT WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int iCmdShow )
 {
     LRESULT result;
-    void exceptionHandler( Throwable e ) { throw e; }
 
     try
     {
@@ -112,5 +76,39 @@ auto my_win_main( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine,
     }
 
     return msg.wParam; 
+}
+
+
+extern( Windows ) nothrow 
+LRESULT WndProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam ) 
+{
+    HDC hdc;
+    PAINTSTRUCT ps; 
+    RECT rect;
+
+    switch( message ) 
+    {
+        case WM_CREATE: return 0;
+        case WM_PAINT:
+            InvalidateRect( hwnd, null, true );
+            hdc = BeginPaint( hwnd, &ps );
+            GetClientRect( hwnd, &rect ); 
+            DrawText( hdc, "Hello!", -1, &rect, DT_SINGLELINE | DT_CENTER | DT_VCENTER );
+            EndPaint( hwnd, &ps ) ;
+            return 0;
+        case WM_DESTROY: PostQuitMessage( 0 ); return 0;
+        case WM_LBUTTONUP: return 0;
+        case WM_LBUTTONDOWN:
+            InvalidateRect( hwnd, null, true );
+            hdc = BeginPaint( hwnd, &ps );
+            GetClientRect( hwnd, &rect );
+            DrawText( hdc, "WM_LBUTTONDOWN", -1, &rect, DT_SINGLELINE | DT_CENTER | DT_VCENTER );
+            EndPaint( hwnd, &ps );
+            return 0;      
+        default:
+            break;
+    }
+
+    return DefWindowProc( hwnd, message, wParam, lParam );
 }
 

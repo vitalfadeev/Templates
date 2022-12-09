@@ -7,7 +7,6 @@ extern (Windows)
 int WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int iCmdShow )
 {
     int result;
-    void exceptionHandler( Throwable e ) { throw e; }
 
     try
     {
