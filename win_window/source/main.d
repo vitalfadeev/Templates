@@ -33,7 +33,7 @@ int my_win_main( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, 
 
     // Window
     wndClass.style = CS_HREDRAW | CS_VREDRAW;
-    wndClass.lpfnWndProc   = &WndProc;
+    wndClass.lpfnWndProc   = &WindowProc;
     wndClass.cbClsExtra    = 0;
     wndClass.cbWndExtra    = 0;
     wndClass.hInstance     = hInstance;
@@ -83,7 +83,7 @@ int my_win_main( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, 
 
 
 extern( Windows ) nothrow 
-LRESULT WndProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam ) 
+LRESULT WindowProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam ) 
 {
     HDC hdc;
     PAINTSTRUCT ps; 
