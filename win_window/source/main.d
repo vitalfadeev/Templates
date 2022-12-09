@@ -64,7 +64,7 @@ auto my_win_main( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine,
     );                           
 
     // Show
-    ShowWindow( hWnd, SW_SHOWMAXIMIZED );
+    ShowWindow( hWnd, iCmdShow );
     UpdateWindow( hWnd ); 
 
     // Main loop
