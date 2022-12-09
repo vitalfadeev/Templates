@@ -6,9 +6,9 @@ import std.utf;
 
 
 extern (Windows)
-LRESULT WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int iCmdShow )
+int WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int iCmdShow )
 {
-    LRESULT result;
+    int result;
 
     try
     {
@@ -26,7 +26,7 @@ LRESULT WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, 
 }
 
 
-auto my_win_main( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int iCmdShow )
+int my_win_main( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int iCmdShow )
 {
     auto className = toUTF16z( "My First M'ofocking Window" );
     WNDCLASS wndClass;
@@ -75,7 +75,7 @@ auto my_win_main( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine,
         DispatchMessage( &msg );
     }
 
-    return msg.wParam; 
+    return cast( int )msg.wParam;
 }
 
 

@@ -1,0 +1,20 @@
+# Specify filepatterns you want git to ignore.
+
+
+.dub
+docs.json
+__dummy.html
+docs/
+/caps
+caps.so
+caps.dylib
+caps.dll
+caps.a
+caps.lib
+caps-test-*
+*.exe
+*.pdb
+*.o
+*.obj
+*.lst
+mixins.d
