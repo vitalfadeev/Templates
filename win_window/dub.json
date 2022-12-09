@@ -1,0 +1,11 @@
+{
+	"name"        : "win_window",
+	"description" : "A minimal D application.",
+	"authors"     : ["vital"],
+	"copyright"   : "Copyright © 2022, vital",
+	"license"     : "proprietary",
+	"libs"        : ["user32", "gdi32"],
+	"sourcePaths" : ["./source"],
+	"importPaths" : [],
+    "dflags"      : [ "-mixin=mixins.d" ],
+}
