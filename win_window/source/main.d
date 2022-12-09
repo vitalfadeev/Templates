@@ -69,10 +69,10 @@ auto my_win_main( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine,
 
     // Main loop
     MSG msg;
-    while ( GetMessageA( &msg, null, 0, 0 ) ) 
+    while ( GetMessage( &msg, null, 0, 0 ) ) 
     {
         TranslateMessage( &msg );
-        DispatchMessageA( &msg );
+        DispatchMessage( &msg );
     }
 
     return msg.wParam; 
@@ -97,7 +97,6 @@ LRESULT WndProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam )
             EndPaint( hwnd, &ps ) ;
             return 0;
         case WM_DESTROY: PostQuitMessage( 0 ); return 0;
-        case WM_LBUTTONUP: return 0;
         case WM_LBUTTONDOWN:
             InvalidateRect( hwnd, null, true );
             hdc = BeginPaint( hwnd, &ps );
@@ -105,8 +104,8 @@ LRESULT WndProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam )
             DrawText( hdc, "WM_LBUTTONDOWN", -1, &rect, DT_SINGLELINE | DT_CENTER | DT_VCENTER );
             EndPaint( hwnd, &ps );
             return 0;      
+        case WM_LBUTTONUP: return 0;
         default:
-            break;
     }
 
     return DefWindowProc( hwnd, message, wParam, lParam );
