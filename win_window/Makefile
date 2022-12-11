@@ -6,3 +6,4 @@ clean:
 	del /Q win_window.exe
 	del /Q win_window.pdb
 	del /Q mixins.d
+	del /Q dub.selections.json
