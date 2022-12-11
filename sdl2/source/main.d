@@ -53,7 +53,7 @@ void creatae_window( ref SDL_Window* window, ref SDL_Surface* window_surface )
             0
         );
 
-    if( !window )
+    if ( !window )
     {
         writeln( "ERR: ", SDL_GetError() );
         throw new Exception( "Failed to create window" );
@@ -62,7 +62,7 @@ void creatae_window( ref SDL_Window* window, ref SDL_Surface* window_surface )
     // Surface
     window_surface = SDL_GetWindowSurface( window );
 
-    if( !window_surface )
+    if ( !window_surface )
     {
         writeln( "ERR: ", SDL_GetError() );
         throw new Exception( "Failed to get the surface from the window" );
