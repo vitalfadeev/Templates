@@ -18,3 +18,4 @@ caps-test-*
 *.obj
 *.lst
 mixins.d
+dub.selections.json
