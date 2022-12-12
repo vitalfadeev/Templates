@@ -1,3 +1,5 @@
+import std.conv;
+import std.format;
 import std.stdio;
 import bindbc.sdl;
 
@@ -7,13 +9,20 @@ int main()
     // Init
     init_sdl();
 
+    // Tree
+    Tree tree;
+    create_tree( tree );
+
     // Window, Surface
     SDL_Window*  window;
-    SDL_Surface* window_surface;
-    creatae_window( window, window_surface );
+    create_window( window );
+
+    // Renderer
+    SDL_Renderer* renderer;
+    create_renderer( window, renderer );
 
     // Event Loop
-    event_loop( window );
+    event_loop( tree, window, renderer );
 
     return 0;
 }
@@ -41,7 +50,14 @@ void init_sdl()
 
 
 //
-void creatae_window( ref SDL_Window* window, ref SDL_Surface* window_surface )
+void create_tree( ref Tree tree )
+{
+    tree = new Tree;
+}
+
+
+//
+void create_window( ref SDL_Window* window )
 {
     // Window
     window = 
@@ -49,24 +65,12 @@ void creatae_window( ref SDL_Window* window, ref SDL_Surface* window_surface )
             "SDL2 Window",
             SDL_WINDOWPOS_CENTERED,
             SDL_WINDOWPOS_CENTERED,
-            680, 480,
+            640, 480,
             0
         );
 
     if ( !window )
-    {
-        writeln( "ERR: ", SDL_GetError() );
-        throw new Exception( "Failed to create window" );
-    }
-
-    // Surface
-    window_surface = SDL_GetWindowSurface( window );
-
-    if ( !window_surface )
-    {
-        writeln( "ERR: ", SDL_GetError() );
-        throw new Exception( "Failed to get the surface from the window" );
-    }
+        throw new SDLException( "Failed to create window" );
 
     // Update
     SDL_UpdateWindowSurface( window );    
@@ -74,10 +78,18 @@ void creatae_window( ref SDL_Window* window, ref SDL_Surface* window_surface )
 
 
 //
-void event_loop( ref SDL_Window* window )
+void create_renderer( SDL_Window* window, ref SDL_Renderer* renderer )
 {
+    renderer = SDL_CreateRenderer( window, -1, SDL_RENDERER_SOFTWARE );
+}
+
+//
+void event_loop( Tree tree, ref SDL_Window* window, SDL_Renderer* renderer )
+{
+    //
     bool game_is_still_running = true;
 
+    //
     while ( game_is_still_running )
     {
         SDL_Event event;
@@ -93,6 +105,12 @@ void event_loop( ref SDL_Window* window )
                 default:
             }
 
+            // Render
+            tree.render( renderer );
+
+            // Raxterize
+            SDL_RenderPresent( renderer );
+
             // Update Window
             SDL_UpdateWindowSurface( window );
         }
@@ -100,4 +118,24 @@ void event_loop( ref SDL_Window* window )
         // Delay
         SDL_Delay( 100 );
     }        
+}
+
+
+// 
+class Tree
+{
+    void render( SDL_Renderer* renderer )
+    {
+        //
+    }
+}
+
+
+//
+class SDLException : Exception
+{
+    this( string msg )
+    {
+        super( format!"%s: %s"( SDL_GetError().to!string, msg ) );
+    }
 }
