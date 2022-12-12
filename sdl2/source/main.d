@@ -33,16 +33,12 @@ void init_sdl()
 {
     SDLSupport ret = loadSDL();
 
-    if ( ret !=sdlSupport ) 
+    if ( ret != sdlSupport ) 
     {
         if ( ret == SDLSupport.noLibrary ) 
-        {
             throw new Exception( "The SDL shared library failed to load" );
-        }
         else if ( SDLSupport.badLibrary ) 
-        {
             throw new Exception( "One or more symbols failed to load. The likely cause is that the shared library is for a lower version than bindbc-sdl was configured to load (via SDL_204, GLFW_2010 etc.)" );
-        }
     }
 
     loadSDL( "sdl2.dll" );
@@ -82,6 +78,7 @@ void create_renderer( SDL_Window* window, ref SDL_Renderer* renderer )
 {
     renderer = SDL_CreateRenderer( window, -1, SDL_RENDERER_SOFTWARE );
 }
+
 
 //
 void event_loop( Tree tree, ref SDL_Window* window, SDL_Renderer* renderer )
