@@ -4,7 +4,7 @@
 	"authors"      : [ "vital" ],
 	"copyright"    : "Copyright © 2022, vital",
 	"license"      : "proprietary",
-	"libs"        : ["user32"],
+	"libs"         : ["user32"],
 	"dependencies" : {
 	},
 	"versions"     : [],

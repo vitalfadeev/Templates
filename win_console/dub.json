@@ -1,5 +1,5 @@
 {
-	"name"        : "win_console,
+	"name"        : "win_console",
 	"description" : "A minimal D application.",
 	"authors"     : ["vital"],
 	"copyright"   : "Copyright © 2022, vital",
@@ -7,5 +7,8 @@
 	"libs"        : ["user32"],
 	"sourcePaths" : ["./source"],
 	"importPaths" : [],
-    "dflags"      : [ "-mixin=mixins.d" ],
+	"dependencies" : {
+	},
+	"versions"     : [],
+	"dflags"      : [ "-mixin=mixins.d" ],
 }
