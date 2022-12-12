@@ -89,17 +89,16 @@ void event_loop( Tree tree, ref SDL_Window* window, SDL_Renderer* renderer )
     //
     while ( game_is_still_running )
     {
-        SDL_Event event;
+        SDL_Event e;
 
-        while ( SDL_PollEvent( &event ) > 0 ) 
+        while ( SDL_PollEvent( &e ) > 0 ) 
         {
             // Process Event
-            switch ( event.type )
+            // SDL_QUIT
+            if ( e.type == SDL_QUIT ) 
             {
-                case SDL_QUIT:
-                    game_is_still_running = false;
-                    break;
-                default:
+                game_is_still_running = false;
+                break;
             }
 
             // Render
@@ -107,9 +106,6 @@ void event_loop( Tree tree, ref SDL_Window* window, SDL_Renderer* renderer )
 
             // Raxterize
             SDL_RenderPresent( renderer );
-
-            // Update Window
-            SDL_UpdateWindowSurface( window );
         }
 
         // Delay
