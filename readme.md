@@ -6,7 +6,7 @@ DLL template
 
 DllMain().
 
-## SDL2
+## sdl2
 
 SDL2 template. Version SDL_2022.
 
