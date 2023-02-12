@@ -104,7 +104,7 @@ void event_loop( Tree tree, ref SDL_Window* window, SDL_Renderer* renderer )
             // Render
             tree.render( renderer );
 
-            // Raxterize
+            // Rasterize
             SDL_RenderPresent( renderer );
         }
 
