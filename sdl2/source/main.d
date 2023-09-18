@@ -37,7 +37,8 @@ void init_sdl()
     {
         if ( ret == SDLSupport.noLibrary ) 
             throw new Exception( "The SDL shared library failed to load" );
-        else if ( SDLSupport.badLibrary ) 
+        else 
+        if ( ret == SDLSupport.badLibrary ) 
             throw new Exception( "One or more symbols failed to load. The likely cause is that the shared library is for a lower version than bindbc-sdl was configured to load (via SDL_204, GLFW_2010 etc.)" );
     }
 
