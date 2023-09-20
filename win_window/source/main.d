@@ -28,7 +28,7 @@ int WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int 
 
 int my_win_main( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int iCmdShow )
 {
-    auto className = toUTF16z( "My First M'ofocking Window" );
+    auto className = toUTF16z( "Window" );
     WNDCLASS wndClass;
 
     // Window
