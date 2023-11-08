@@ -1,0 +1,9 @@
+{
+	"name"        : "d",
+	"description" : "d",
+	"authors"     : ["Vital Fadeev"],
+	"copyright"   : "Copyright © 2023, Vital Fadeev",
+	"license"     : "GPL3",
+	"dflags"      : [ "-mixin=mixins.d" ],
+	"targetType"  : "sourceLibrary"
+}
