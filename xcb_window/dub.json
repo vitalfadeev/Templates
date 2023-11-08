@@ -1,0 +1,21 @@
+{
+	"name": "xcb",
+	"description": "A minimal D application.",
+	"authors": ["Vital Fadeev"],
+	"copyright": "Copyright © 2023, Vital Fadeev",
+	"license": "GPL3",
+	"dflags"         : ["-mixin=mixins.d"],
+	"configurations" : [
+		{
+			"name"           : "XCB",
+			"targetType"     : "executable",
+			"platforms"      : ["linux"],
+			"versions"       : ["XCB"],
+			"libs"           : [],
+			"dependencies"   : {
+                "xcb-d" : "~>2.1.1+1.11.1",
+                "xau"   : { "path":"deps/xau" , "version":"*" }
+			},
+		},
+	]
+}

@@ -1,0 +1,16 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/xcb
+xcb.so
+xcb.dylib
+xcb.dll
+xcb.a
+xcb.lib
+xcb-test-*
+*.exe
+*.pdb
+*.o
+*.obj
+*.lst
