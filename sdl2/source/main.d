@@ -4,61 +4,49 @@ import std.stdio;
 import bindbc.sdl;
 
 
-int main()
-{
+int 
+main () {
     // Init
-    init_sdl();
-
-    // Tree
-    Tree tree;
-    create_tree( tree );
+    init_sdl ();
 
     // Window, Surface
     SDL_Window*  window;
-    create_window( window );
+    create_window (window);
 
     // Renderer
     SDL_Renderer* renderer;
-    create_renderer( window, renderer );
+    create_renderer (window, renderer);
 
     // Event Loop
-    event_loop( tree, window, renderer );
+    event_loop (window, renderer, &frame);
 
     return 0;
 }
 
 
 //
-void init_sdl()
-{
+void 
+init_sdl () {
     SDLSupport ret = loadSDL();
 
-    if ( ret != sdlSupport ) 
-    {
-        if ( ret == SDLSupport.noLibrary ) 
-            throw new Exception( "The SDL shared library failed to load" );
+    if (ret != sdlSupport) {
+        if (ret == SDLSupport.noLibrary) 
+            throw new Exception ("The SDL shared library failed to load");
         else 
-        if ( ret == SDLSupport.badLibrary ) 
-            throw new Exception( "One or more symbols failed to load. The likely cause is that the shared library is for a lower version than bindbc-sdl was configured to load (via SDL_204, GLFW_2010 etc.)" );
+        if (ret == SDLSupport.badLibrary) 
+            throw new Exception ("One or more symbols failed to load. The likely cause is that the shared library is for a lower version than bindbc-sdl was configured to load (via SDL_204, GLFW_2010 etc.)");
     }
 
-    loadSDL( "sdl2.dll" );
+    loadSDL ("sdl2.dll");
 }
 
 
 //
-void create_tree( ref Tree tree )
-{
-    tree = new Tree;
-}
-
-
-//
-void create_window( ref SDL_Window* window )
-{
+void 
+create_window (ref SDL_Window* window) {
     // Window
     window = 
-        SDL_CreateWindow(
+        SDL_CreateWindow (
             "SDL2 Window",
             SDL_WINDOWPOS_CENTERED,
             SDL_WINDOWPOS_CENTERED,
@@ -66,70 +54,65 @@ void create_window( ref SDL_Window* window )
             0
         );
 
-    if ( !window )
-        throw new SDLException( "Failed to create window" );
+    if (!window)
+        throw new SDLException ("Failed to create window");
 
     // Update
-    SDL_UpdateWindowSurface( window );    
+    SDL_UpdateWindowSurface (window);
 }
 
 
 //
-void create_renderer( SDL_Window* window, ref SDL_Renderer* renderer )
-{
-    renderer = SDL_CreateRenderer( window, -1, SDL_RENDERER_SOFTWARE );
+void 
+create_renderer (SDL_Window* window, ref SDL_Renderer* renderer) {
+    renderer = SDL_CreateRenderer (window, -1, SDL_RENDERER_SOFTWARE);
 }
 
 
 //
-void event_loop( Tree tree, ref SDL_Window* window, SDL_Renderer* renderer )
-{
+void 
+event_loop (ref SDL_Window* window, SDL_Renderer* renderer, void function(SDL_Renderer* renderer) frame) {
     //
     bool game_is_still_running = true;
 
     //
-    while ( game_is_still_running )
-    {
+    while (game_is_still_running) {
         SDL_Event e;
 
-        while ( SDL_PollEvent( &e ) > 0 ) 
-        {
+        while (SDL_PollEvent (&e) > 0) {
             // Process Event
             // SDL_QUIT
-            if ( e.type == SDL_QUIT ) 
-            {
+            if (e.type == SDL_QUIT) {
                 game_is_still_running = false;
                 break;
             }
 
             // Render
-            tree.render( renderer );
+            frame (renderer);
 
             // Rasterize
-            SDL_RenderPresent( renderer );
+            SDL_RenderPresent (renderer);
         }
 
         // Delay
-        SDL_Delay( 100 );
+        SDL_Delay (100);
     }        
 }
 
 
-// 
-class Tree
-{
-    void render( SDL_Renderer* renderer )
-    {
-        //
+//
+class 
+SDLException : Exception {
+    this (string msg) {
+        super (format!"%s: %s" (SDL_GetError().to!string, msg));
     }
 }
 
 
 //
-class SDLException : Exception
-{
-    this( string msg )
-    {
-        super( format!"%s: %s"( SDL_GetError().to!string, msg ) );
-    }
+void
+frame (SDL_Renderer* renderer) {
+    // SDL_SetRenderDrawColor (renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+    // SDL_RenderDrawPoint (renderer, x, y);
+    // ...
 }
