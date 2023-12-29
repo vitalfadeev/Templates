@@ -11,11 +11,11 @@ main () {
 
     // Window, Surface
     SDL_Window*  window;
-    create_window (window);
+    new_window (window);
 
     // Renderer
     SDL_Renderer* renderer;
-    create_renderer (window, renderer);
+    new_renderer (window, renderer);
 
     // Event Loop
     event_loop (window, renderer, &frame);
@@ -43,7 +43,7 @@ init_sdl () {
 
 //
 void 
-create_window (ref SDL_Window* window) {
+new_window (ref SDL_Window* window) {
     // Window
     window = 
         SDL_CreateWindow (
@@ -64,7 +64,7 @@ create_window (ref SDL_Window* window) {
 
 //
 void 
-create_renderer (SDL_Window* window, ref SDL_Renderer* renderer) {
+new_renderer (SDL_Window* window, ref SDL_Renderer* renderer) {
     renderer = SDL_CreateRenderer (window, -1, SDL_RENDERER_SOFTWARE);
 }
 
