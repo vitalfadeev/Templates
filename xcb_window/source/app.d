@@ -5,15 +5,14 @@ import xcb.xcb;
 import xau;
 
 
-auto get_auth( out XAuth xauth )
-{
+auto 
+get_auth (out XAuth xauth) {
 	ushort family  = xau.FamilyLocal;
 	string address = "ASUS-K53SD";
 	string number  = "0";
 	string name    = "";
 	xau.Xauth xau_auth;
-	if ( xau.GetAuthByAddr( family, address, number, name, xau_auth ) )
-	{
+	if (xau.GetAuthByAddr (family, address, number, name, xau_auth)) {
 		xauth.from_Xauth( xau_auth );
 		return true;
 	}
@@ -21,13 +20,14 @@ auto get_auth( out XAuth xauth )
 	return false;
 }
 
-struct XAuth {
+struct 
+XAuth {
 	xcb_auth_info_t xcb_auth;
-	string          _name;
-	ubyte[]  		_data;
+	string         _name;
+	ubyte[]  	   _data;
 
-	void from_Xauth( in xau.Xauth _auth )
-	{
+	void 
+    from_Xauth (in xau.Xauth _auth) {
 		import std.conv : to;
 
 		_name            = _auth.name.dup;
@@ -39,16 +39,15 @@ struct XAuth {
 	}
 }
 
-void main()
-{
+void 
+main () {
 	// INIT
     xcb_connection_t* c;
     xcb_screen_t*     screen;
     bool              auth_flag = true;
 
     // CONNECT
-    if ( auth_flag )
-    {
+    if (auth_flag) {
 	    const char* display;
 	    int         prefered_screen;
 
@@ -59,8 +58,7 @@ void main()
 	    if ( xcb_connection_has_error( c ) )
 	        throw new XCBException( "Cannot open display", c );    	
     }
-    else
-    {
+    else {
 	    // Open the connection to the X server     
 	    //c = xcb_connect( getenv( "DISPLAY" ), null );
 	    c = xcb_connect( null, null );
@@ -133,20 +131,18 @@ void main()
 	xcb_disconnect( c );
 }
 
-class XCBException : Exception
-{
+class 
+XCBException : Exception {
     import xcb.xcb;
 
-    this( string s, xcb_connection_t* c )
-    {
+    this (string s, xcb_connection_t* c) {
         auto err = xcb_connection_has_error( c );
-
         super( xcb_error_to_string( err ) );
     }
 }
 
-string xcb_error_to_string( int err )
-{
+string 
+xcb_error_to_string (int err) {
     switch ( err ) {
         case XCB_CONN_ERROR: 
             return ": [XCB_CONN_ERROR]: because of socket errors, pipe errors or other stream errors";
@@ -164,4 +160,3 @@ string xcb_error_to_string( int err )
             return "";
     }    
 }
-

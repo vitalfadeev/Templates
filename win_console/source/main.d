@@ -4,19 +4,17 @@ import core.sys.windows.windows;
 
 
 extern (Windows)
-int WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int iCmdShow )
-{
+int 
+WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int iCmdShow) {
     int result;
 
-    try
-    {
-        Runtime.initialize();
-        result = my_win_main( hInstance, hPrevInstance, lpCmdLine, iCmdShow );
-        Runtime.terminate();
+    try {
+        Runtime.initialize ();
+        result = my_win_main (hInstance, hPrevInstance, lpCmdLine, iCmdShow);
+        Runtime.terminate ();
     }
-    catch (Throwable o)
-    {
-        MessageBox( NULL, o.toString().toUTF16z, "Error", MB_OK | MB_ICONEXCLAMATION );
+    catch (Throwable o) {
+        MessageBox (NULL, o.toString().toUTF16z, "Error", MB_OK | MB_ICONEXCLAMATION);
         result = 0;
     }
 
@@ -24,9 +22,9 @@ int WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int 
 }
 
 
-int my_win_main( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int iCmdShow )
-{
-    MessageBox(NULL, "Hello, Windows!", "Your Application", 0);
+int 
+my_win_main (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int iCmdShow) {
+    MessageBox (NULL, "Hello, Windows!", "Your Application", 0);
     return 0;
 }
 
