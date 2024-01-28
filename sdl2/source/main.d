@@ -18,7 +18,8 @@ main () {
     new_renderer (window, renderer);
 
     // Event Loop
-    event_loop (window, renderer, &frame);
+    Frame frame;
+    event_loop (window, renderer, frame);
 
     return 0;
 }
@@ -71,24 +72,27 @@ new_renderer (SDL_Window* window, ref SDL_Renderer* renderer) {
 
 //
 void 
-event_loop (ref SDL_Window* window, SDL_Renderer* renderer, void function(SDL_Renderer* renderer) frame) {
-    //
-    bool game_is_still_running = true;
+event_loop (ref SDL_Window* window, SDL_Renderer* renderer, ref Frame frame) {
+    bool _go = true;
 
-    //
-    while (game_is_still_running) {
+    while (_go) {
         SDL_Event e;
 
         while (SDL_PollEvent (&e) > 0) {
             // Process Event
-            // SDL_QUIT
-            if (e.type == SDL_QUIT) {
-                game_is_still_running = false;
-                break;
+            // Process Event
+            switch (e.type) {
+                case SDL_QUIT:
+                    _go = false;
+                    break;
+                case SDL_MOUSEBUTTONDOWN:
+                    frame.event (&e);
+                    break;
+                default:
             }
 
-            // Render
-            frame (renderer);
+            // Draw
+            frame.draw (renderer);
 
             // Rasterize
             SDL_RenderPresent (renderer);
@@ -110,9 +114,23 @@ SDLException : Exception {
 
 
 //
-void
-frame (SDL_Renderer* renderer) {
-    // SDL_SetRenderDrawColor (renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-    // SDL_RenderDrawPoint (renderer, x, y);
-    // ...
+struct
+Frame {
+    void
+    draw (SDL_Renderer* renderer) {
+        // SDL_SetRenderDrawColor (renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+        // SDL_RenderDrawLine (renderer,0,0,100,100);
+        // SDL_RenderDrawRect (renderer,&rect);
+        // ...
+    }
+
+    void
+    event (SDL_Event* e) {
+        switch (e.type) {
+            case SDL_MOUSEBUTTONDOWN:
+                // ...
+                break;
+            default:
+        }
+    }
 }
