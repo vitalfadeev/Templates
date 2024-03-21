@@ -24,7 +24,7 @@ Win64 template
 
 WinMain(), Window.
 
-## xcb
+## xcb_window
 
 Linux X11/XCB template
 
