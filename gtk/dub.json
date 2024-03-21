@@ -1,0 +1,12 @@
+{
+	"authors": [
+		"vf"
+	],
+	"copyright": "Copyright © 2024, vf",
+	"dependencies": {
+		"gtk-d": "~>3.10.0"
+	},
+	"description": "A minimal D application.",
+	"license": "proprietary",
+	"name": "gtk"
+}
