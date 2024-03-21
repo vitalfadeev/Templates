@@ -28,7 +28,7 @@ WinMain(), Window.
 
 Linux X11/XCB template
 
-Window, Event loop
+Window, X11 auth, Event loop
 
 ## gtk
 
