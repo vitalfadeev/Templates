@@ -24,6 +24,12 @@ Win64 template
 
 WinMain(), Window.
 
+## xcb
+
+Linux X11/XCB template
+
+Window, Event loop
+
 ## gtk
 
 GTK template
