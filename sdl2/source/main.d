@@ -118,7 +118,9 @@ struct
 Frame {
     void
     draw (SDL_Renderer* renderer) {
+        // SDL_RenderClear (renderer);
         // SDL_SetRenderDrawColor (renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+        // SDL_RenderDrawPoint (renderer, x, y);
         // SDL_RenderDrawLine (renderer,0,0,100,100);
         // SDL_RenderDrawRect (renderer,&rect);
         // ...
