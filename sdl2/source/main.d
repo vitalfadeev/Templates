@@ -48,7 +48,7 @@ new_window (ref SDL_Window* window) {
     // Window
     window = 
         SDL_CreateWindow (
-            "SDL2 Window",
+            __FILE_FULL_PATH__, // "SDL2 Window",
             SDL_WINDOWPOS_CENTERED,
             SDL_WINDOWPOS_CENTERED,
             640, 480,
@@ -118,10 +118,12 @@ struct
 Frame {
     void
     draw (SDL_Renderer* renderer) {
+        // SDL_SetRenderDrawColor (renderer, 0x00, 0x00, 0x00, 0x00);
         // SDL_RenderClear (renderer);
         // SDL_SetRenderDrawColor (renderer, 0xFF, 0xFF, 0xFF, 0xFF);
         // SDL_RenderDrawPoint (renderer, x, y);
         // SDL_RenderDrawLine (renderer,0,0,100,100);
+        // SDL_RenderFillRect (renderer,&rect);
         // SDL_RenderDrawRect (renderer,&rect);
         // ...
     }
