@@ -1,0 +1,37 @@
+{
+	"authors": [
+		"Mike Parker"
+	],
+	"configurations": [
+		{
+			"name": "dynamic",
+			"targetType": "staticLibrary"
+		},
+		{
+			"buildOptions": [
+				"betterC"
+			],
+			"name": "dynamicBC",
+			"subConfigurations": {
+				"bindbc-loader": "yesBC"
+			},
+			"targetType": "staticLibrary"
+		}
+	],
+	"dependencies": {
+		"bindbc-loader": "~>1.1.0"
+	},
+	"description": "Dynamic bindings to OpenGL, compatible with BetterC, @nogc, and nothrow.",
+	"importPaths": [
+		"source/"
+	],
+	"license": "BSL-1.0",
+	"name": "bindbc-opengl",
+	"sourcePaths": [
+		"source/"
+	],
+	"targetName": "BindBC_OpenGL",
+	"targetPath": "lib",
+	"targetType": "staticLibrary",
+	"version": "1.1.1"
+}

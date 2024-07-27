@@ -1,0 +1,30 @@
+{
+	"authors": [
+		"vf"
+	],
+	"copyright": "Copyright © 2024, vf",
+	"configurations": [
+		{
+			"name": "linux",
+			"platforms"      : ["linux"],
+			"targetType"     : "executable",
+			"dependencies": {
+				"bindbc-common" : {"path":"deps/bindbc-common"},
+				"bindbc-loader" : {"path":"deps/bindbc-loader"},
+				"bindbc-sdl"    : {"path":"deps/bindbc-sdl"},
+				"bindbc-opengl" : {"path":"deps/bindbc-opengl"},
+			},			
+			"versions" : ["GL_AllowDeprecated", "GL_ES_2"],
+		},
+	],
+	"subConfigurations": {
+		"bindbc-opengl": "dynamicBC"
+	},
+	"description": "A minimal D application.",
+	"license": "proprietary",
+	"name": "gl_normalized",
+	"versions": [
+		"SDL_2_6",
+		"SDL_2_6_5",
+	],
+}
