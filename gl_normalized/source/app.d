@@ -333,7 +333,7 @@ GL_Side {
         	/* index */      a_position, 
         	/* size */       size, 
         	/* type */       GL_FLOAT, 
-        	/* normalized */ GL_TRUE, 
+        	/* normalized */ GL_FALSE, 
         	/* stride */     0, 
         	/* pointer */    points.ptr
     	);
