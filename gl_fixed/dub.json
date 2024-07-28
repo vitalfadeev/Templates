@@ -22,7 +22,7 @@
 	},
 	"description": "A minimal D application.",
 	"license": "proprietary",
-	"name": "gl_normalized",
+	"name": "gl_fixed",
 	"versions": [
 		"SDL_2_6",
 		"SDL_2_6_5",
