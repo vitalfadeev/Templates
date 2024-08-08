@@ -6,25 +6,18 @@ import bindbc.sdl;
 import gl.gles2;
 alias log = writeln;
 
-enum window_width  = 1024;
+enum window_width  = 512;
 enum window_height = 512;
-
-GLfloat[] 
-_test_triangle_verts = [
-     0.0f,  0.5f,
-    -0.5f, -0.5f,
-     0.5f, -0.5f,
-];
 
 
 void 
 main() {
-	// Init
-	init_sdl ();
+    // Init
+    init_sdl ();
 
-	// Window, Surface
-	SDL_Window*  window;
-	new_window (window);
+    // Window, Surface
+    SDL_Window* window;
+    new_window (window);
 
     // OpenGL context
     SDL_GLContext glc;
@@ -33,19 +26,9 @@ main() {
     //
     init_gl (window,glc);
 
-	// Renderer
-	SDL_Renderer* renderer;
-	new_renderer (window, renderer);
-
-	// Event Loop
-	auto frame = 
-        Frame (
-            GL_Side (
-                renderer,
-                window
-            )
-        );
-	event_loop (window,renderer,frame);
+    // Event Loop
+    auto frame = Frame (window);
+    event_loop (window,frame);
 }
 
 
@@ -122,36 +105,14 @@ new_gl_context (SDL_Window* window, ref SDL_GLContext glc) {
 
 void
 init_gl (SDL_Window* window,SDL_GLContext glc) {
-version (Android) {
-    SDL_GL_SetAttribute (SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
-    SDL_GL_SetAttribute (SDL_GL_CONTEXT_MAJOR_VERSION,2);
-    SDL_GL_SetAttribute (SDL_GL_CONTEXT_MINOR_VERSION, 0);
-    SDL_GL_SetAttribute (SDL_GL_DOUBLEBUFFER,1);
-    SDL_GL_SetAttribute (SDL_GL_DEPTH_SIZE,24);    
-    SDL_GL_SetAttribute (SDL_GL_ACCELERATED_VISUAL,1);
-}
-else
-version (linux) {
     SDL_GL_SetAttribute (SDL_GL_CONTEXT_FLAGS, 0);
-    SDL_GL_SetAttribute (SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-    SDL_GL_SetAttribute (SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute (SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
+    SDL_GL_SetAttribute (SDL_GL_CONTEXT_MAJOR_VERSION, 2);
     SDL_GL_SetAttribute (SDL_GL_CONTEXT_MINOR_VERSION, 0);
     SDL_GL_SetAttribute (SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute (SDL_GL_DEPTH_SIZE, 24);
+    SDL_GL_SetAttribute (SDL_GL_ACCELERATED_VISUAL,1);
     SDL_GL_SetAttribute (SDL_GL_STENCIL_SIZE, 8);
-}
-else {
-    assert (0, "unsupported platform");
-}
-
-    // import bindbc.gles.egl;
-    // loadEGL()
-    //   libEGL.so
-    //
-    // import bindbc.gles.gles;
-    // loadGLES ();
-    //   libGLESv2.so
-    // Create context for OpenGL window
 
 version (Android) {
     import bindbc.gles.gles;
@@ -176,7 +137,7 @@ version (linux) {
     log (glSupport);
     if ( openglLoaded != glSupport) {
         import std.conv : to;
-        log ("Error loading OpenGL shared library: ", to!string(openglLoaded));
+        log ("Error loading OpenGL shared library: ", to!string (openglLoaded));
         throw new Exception ("Error loading OpenGL shared library");
     }
 }
@@ -188,26 +149,7 @@ else {
 
 //
 void 
-new_renderer (SDL_Window* window, ref SDL_Renderer* renderer) {
-version (GL_ES_2)
-    renderer = 
-        SDL_CreateRenderer (
-            window, 
-            -1, 
-            SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE
-        );
-else 
-    renderer = 
-        SDL_CreateRenderer (
-            window, 
-            -1, 
-            SDL_RENDERER_SOFTWARE
-        );
-}
-
-//
-void 
-event_loop (ref SDL_Window* window, SDL_Renderer* renderer, ref Frame frame) {
+event_loop (ref SDL_Window* window, ref Frame frame) {
     bool _go = true;
 
     while (_go) {
@@ -235,10 +177,7 @@ event_loop (ref SDL_Window* window, SDL_Renderer* renderer, ref Frame frame) {
             }
 
             // Draw
-            frame.draw (renderer,window);
-
-            // Rasterize
-            //SDL_RenderPresent (renderer);
+            frame.draw (window);
         }
 
         // Delay
@@ -258,36 +197,101 @@ SDLException : Exception {
 
 struct
 Frame {
-    GL_Side gl_side;
+    SDL_Window* window;
+    GLES2       gl;
 
-	this (GL_Side gl_side) {
-	    this.gl_side = gl_side;
-	    this.gl_side._init ();
-	}
+    this (SDL_Window* window) {
+        this.window = window;
+        this.gl._init ();
+    }
 
-	void
-	draw (SDL_Renderer* renderer, SDL_Window* window) {
-		_clear_buffer ();
-		_render_scene ();
-		_update_window (window);
-	}
+    void
+    draw (SDL_Window* window) {
+        _clear_buffer ();
+        _render_scene ();
+        _update_window (window);
+    }
 
 	void
 	_clear_buffer () {
-		glViewport (0, 0, window_width, window_height);
+		glViewport (0, 0, window_width, window_width);
 		glClearColor (0.2f, 0.2f, 0.2f, 1.0f);
 		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
 	void
 	_render_scene () {
-		gl_side.draw_line ();
+        Point[] 
+        _test_triangle_verts = [
+            Point (  0.0f,  0.5f),
+            Point ( -0.5f, -0.5f),
+            Point (  0.5f, -0.5f),
+        ]; 
+        draw_triangle (_test_triangle_verts);
+        //draw_triangle_at (_test_triangle_verts);
+        //draw_line (Pos (0,0), Pos (1,1));
+        draw_bold_line (Pos (0,0), Pos (1,1), 1.0/window_width*50,1.0/window_width*50);
 	}
 
 	void
 	_update_window (SDL_Window* window) {
 		SDL_GL_SwapWindow (window);	    
 	}
+
+    void
+    draw_triangle (Point[] points) {
+        auto program = gl.context.user_data.basic_program;
+        program.use ();
+        program.ray (points);
+
+        glDrawArrays (
+            GL_LINE_LOOP, 
+            /* first */ 0, 
+            /* count */ cast (GLsizei) points.length
+        );
+    }
+
+    void
+    draw_triangle_at (Point[] points) {
+        auto program = gl.context.user_data.translate_program;
+        program.use ();
+        program.ray (points);
+        program.translate ([-1.0,-1.0]);
+
+        glDrawArrays (
+            GL_LINE_LOOP, 
+            /* first */ 0, 
+            /* count */ cast (GLsizei) points.length
+        );
+    }
+
+    void
+    draw_line (Pos a, Pos b) {
+        Point[] points = [a,b];
+        auto program = gl.context.user_data.basic_program;
+        program.use ();
+        program.ray (points);
+
+        glDrawArrays (
+            GL_LINE_LOOP, 
+            /* first */ 0, 
+            /* count */ cast (GLsizei) points.length
+        );
+    }
+
+    void
+    draw_bold_line (Pos a, Pos b, float wl, float wr) {
+        Point[] points = [a,b];
+        auto program = gl.context.user_data.basic_program;
+        program.use ();
+        program.ray (points);
+
+        glDrawArrays (
+            GL_LINE_LOOP, 
+            /* first */ 0, 
+            /* count */ cast (GLsizei) points.length
+        );
+    }
 
 	void
 	event (SDL_Event* e) {
@@ -306,43 +310,5 @@ Frame {
 	on_mouse_motion (SDL_MouseMotionEvent* e) {
 		//
 	}
-}
-
-struct
-GL_Side {
-	SDL_Renderer* renderer;
-	SDL_Window*   window;
-	GLES2         gl;
-
-    void
-    _init () {
-        gl._init ();
-    }
-
-    void
-    draw_line () {
-    	auto program = gl.context.user_data.basic_program;
-        glUseProgram (program.id);
-
-        auto points = _test_triangle_verts;
-        auto size   = 2;
-
-        //auto a_position = program.attrib ("a_position");
-        auto a_position = 0;
-        glVertexAttribPointer (
-        	/* index */      a_position, 
-        	/* size */       size, 
-        	/* type */       GL_FLOAT, 
-        	/* normalized */ GL_FALSE, 
-        	/* stride */     0, 
-        	/* pointer */    points.ptr
-    	);
-        glEnableVertexAttribArray (a_position);
-        glDrawArrays (
-        	GL_LINE_LOOP, 
-        	/* first */ 0, 
-        	/* count */ cast (GLsizei) points.length / size
-    	);
-    }
 }
 

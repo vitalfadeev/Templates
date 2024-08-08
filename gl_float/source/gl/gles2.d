@@ -3,6 +3,9 @@ module gl.gles2;
 import std.string;
 //import types;
 
+enum window_width  = 1024;
+enum window_height = 512;
+
 
 //import bindbc.gles.egl;
 version (Android) {
@@ -41,7 +44,7 @@ GLES2 {
                 "attribute vec2 a_position;   \n" ~
                 "void main()                  \n" ~
                 "{                            \n" ~
-                "   gl_Position = a_position; \n" ~
+                "   gl_Position = vec4(a_position.x,a_position.y,0.0,1.0); \n" ~
                 "}                            \n"
             ,
                 //"precision mediump float;\n" ~
@@ -73,10 +76,9 @@ GLES2 {
             Program (
                 "attribute vec2 a_position;                  \n" ~
                 "uniform vec2 u_tr;                          \n" ~
-                "uniform vec2 u_sc;                          \n" ~
                 "void main()                                 \n" ~
                 "{                                           \n" ~
-                "   gl_Position = vec4(a_position.x * u_sc.x + u_tr.x, a_position.y * u_sc.y + u_tr.y, 0.0, 1.0);   \n" ~
+                "   gl_Position = vec4(a_position.x + u_tr.x, a_position.y + u_tr.y, 0.0, 1.0);   \n" ~
                 "}                                           \n"
             ,
                 //"precision mediump float;                            \n" ~
@@ -203,6 +205,71 @@ UserData {
 
 
 struct
+Point {
+    GLfloat x;
+    GLfloat y;
+
+    alias GL_TYPE        = GL_FLOAT;
+    alias GL_SHOULD_NORM = GL_FALSE;
+}
+
+alias Pos = Point;
+
+struct
+D {
+    Pos   a;
+    Pos   b;
+    float dx;
+    float dy;
+    EPos  e;
+    bool  by_x;
+
+    this (Pos a, Pos b) {
+        if (a.x < b.x) {
+            if (a.y < b.y) {
+                dx = b.x - a.x;
+                dy = b.y - a.y;
+                e.x =  1;
+                e.y =  1;
+            }
+            else {
+                dx = b.x - a.x;
+                dy = a.y - b.y;
+                e.x =  1;
+                e.y = -1;
+            }
+        }
+        else {
+            if (a.y < b.y) {
+                dx = a.x - b.x;
+                dy = b.y - a.y;
+                e.x = -1;
+                e.y =  1;
+            }
+            else {
+                dx = a.x - b.x;
+                dy = a.y - b.y;
+                e.x = -1;
+                e.y = -1;
+            }
+        }
+
+        by_x = dx > dy ? true : false;
+        if (by_x)
+            e.y = cast (float) (e.y * (dy / dx));
+        else
+            e.x = cast (float) (e.x * dx);
+    }
+}
+
+struct
+EPos {
+    float x;
+    float y;
+}
+
+
+struct
 Program {
     Program_Id id;
 
@@ -258,11 +325,62 @@ Program {
     attrib (string name) {
         import std.string : toStringz;
 
-        auto loc = glGetAttribLocation (id, name.toStringz);
+        auto loc = glGetAttribLocation (
+            /* program */ id, 
+            /* name */    name.toStringz
+        );
+
         if (loc == -1)
             throw new Exception ("glGetAttribLocation");
 
-        return Attrib ();
+        return Attrib (loc);
+    }
+
+    void
+    use () {
+        glUseProgram (id);
+    }
+
+    void
+    ray (Point[] points, string a_position_name = "a_position") {
+        auto a_position = attrib (a_position_name);
+
+        glVertexAttribPointer (
+            /* index */      a_position, 
+            /* size */       Point.tupleof.length, 
+            /* type */       Point.GL_TYPE, 
+            /* normalized */ Point.GL_SHOULD_NORM,  // GL_TRUE - will be converted to [-1.0..1.0]
+            /* stride */     0, 
+            /* pointer */    points.ptr
+        );
+
+        glEnableVertexAttribArray (a_position);
+    }
+
+    void
+    translate (GLfloat[2] points, string u_tr_name = "u_tr") {
+        auto u_tr = glGetUniformLocation (id,u_tr_name.toStringz);
+        glUniform2fv (u_tr,1,points.ptr);
+    }
+
+    void
+    draw (GLenum mode=GL_LINE_STRIP, size_t count) {
+        glDrawArrays (
+            mode, 
+            /* first */ 0, 
+            /* count */ cast (GLsizei) count
+        );
+    }
+
+    void
+    draw (GLenum mode=GL_LINE_STRIP, Point[] points) {
+        use ();
+        ray (points);
+        glDrawArrays (
+            mode, 
+            /* first */ 0, 
+            /* count */ cast (GLsizei) points.length
+        );
     }
 
     struct
@@ -299,7 +417,8 @@ Program {
                 super (msg);
             }
         }
-    }}
+    }
+}
 
 
 struct

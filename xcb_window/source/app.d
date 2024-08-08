@@ -1,6 +1,5 @@
 import std.stdio;
 
-import std.stdio : File;
 import xcb.xcb;
 import xau;
 
