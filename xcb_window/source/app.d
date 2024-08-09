@@ -21,8 +21,12 @@ main () {
     xcb_window_t hwnd;
     new_window (c,screen,hwnd);
 
+    // Init GUI tree
+    auto frame = Frame ();
+    frame._init ();
+
     // EVENT LOOP
-    event_loop (c);
+    event_loop (c,frame);
 
     //
     xcb_disconnect (c);
@@ -129,7 +133,7 @@ struct
 Frame {
     void
     _init () {
-        init_tree ();
+        //
     }
 
     void
