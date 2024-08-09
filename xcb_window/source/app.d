@@ -107,21 +107,44 @@ new_window (xcb_connection_t* c, xcb_screen_t* screen, ref xcb_window_t hwnd) {
     xcb_flush (c);    
 }
 
+alias Event = xcb_generic_event_t;
+
 void
-event_loop (xcb_connection_t* c) {
-    xcb_generic_event_t* front;
+event_loop (xcb_connection_t* c, ref Frame frame) {
+    xcb_generic_event_t* e;
 
-    //while ((front = xcb_wait_for_event (c)) != null) {
-    //    import core.stdc.stdlib : free;
-    //    free (front);
-
-    //    log (front);
-    //}
-    while ((front = xcb_wait_for_event (c)) != null) {
+    while ((e = xcb_wait_for_event (c)) != null) {
         import core.stdc.stdlib : free;
-        free (front);
+        log (e);
 
-        log (front);
+        //frame.event (e);
+        //frame.update ();
+        //frame.draw ();
+
+        free (e);
+    }
+}
+
+struct
+Frame {
+    void
+    _init () {
+        init_tree ();
+    }
+
+    void
+    event (Event e) {
+        //
+    }
+
+    void
+    update () {
+        //
+    }
+
+    void
+    draw () {
+        //
     }
 }
 
