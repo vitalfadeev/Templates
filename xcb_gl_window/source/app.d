@@ -3,9 +3,11 @@ alias log = writeln;
 import xcb.xcb;
 import xau;
 public import bindbc.opengl;
-import x11.Xlib : Display,XOpenDisplay,DefaultScreen,True;
-import x11.X : None;
+import x11.Xlib     : Display,XOpenDisplay,DefaultScreen,True;
+import x11.Xlib_xcb : XSetEventQueueOwner,XEventQueueOwner;
+import x11.X        : None;
 import glx.glx;
+
 
 
 void 
@@ -19,27 +21,25 @@ main () {
     // CONNECT
     bool auth_flag = true;
     xcb_connection_t* c;
-    new_connection (auth_flag,default_screen,c);
+    new_connection (auth_flag,/*display,*/default_screen,c);
 
     // Get the first screen
     // screen = xcb_setup_roots_iterator( xcb_get_setup( c ) )[prefered_screen].data;
     xcb_screen_t* screen;
     new_screen (c,default_screen,screen);
 
+    // Create GL context
     // WINDOW
     xcb_window_t hwnd;
-    new_window (c,screen,hwnd);
-
-    // Create GL context
-    GLXDrawable drawable;
-    new_gl_context (display,c,default_screen,screen,hwnd,drawable);
+    GLXDrawable  drawable;
+    new_window (c,display,default_screen,screen,hwnd,drawable);
 
     // Init GUI tree
     auto frame = Frame ();
     frame._init ();
 
     // EVENT LOOP
-    event_loop (c,frame);
+    event_loop (c,display,drawable,frame);
 
     //
     xcb_disconnect (c);
@@ -47,7 +47,10 @@ main () {
 
 
 void
-new_connection (bool auth_flag, int default_screen, ref xcb_connection_t* c) {
+new_connection (bool auth_flag, /*Display* display, */int default_screen, ref xcb_connection_t* c) {
+    //c = XGetXCBConnection (default_screen);
+    //XSetEventQueueOwner (display,XEventQueueOwner.XCBOwnsEventQueue);
+//version (_0):  
     if (auth_flag) {
         const char* display;
         int         prefered_screen;
@@ -89,61 +92,14 @@ new_screen (xcb_connection_t* c, int default_screen, ref xcb_screen_t* screen) {
     screen = screen_iter.data;
 
     //screen = xcb_setup_roots_iterator (xcb_get_setup (c)).data;
-    //log ( "width x height (in pixels): ", screen.width_in_pixels, "x", screen.height_in_pixels );    
+    log ( "Screen: width x height (in pixels): ", screen.width_in_pixels, "x", screen.height_in_pixels );    
 }
+
 
 
 void
-new_window (xcb_connection_t* c, xcb_screen_t* screen, ref xcb_window_t hwnd) {
-    // Ask for our window's Id
-    hwnd = xcb_generate_id (c);
-
-    //
-    immutable(uint)   value_mask = 
-        XCB_CW_BACK_PIXEL | 
-        XCB_CW_EVENT_MASK;
-    immutable(uint[]) value_list = [
-        screen.white_pixel,
-        XCB_EVENT_MASK_EXPOSURE |
-        XCB_EVENT_MASK_KEY_PRESS |
-        XCB_EVENT_MASK_KEY_RELEASE |
-        XCB_EVENT_MASK_BUTTON_PRESS |
-        XCB_EVENT_MASK_BUTTON_RELEASE |
-        XCB_EVENT_MASK_POINTER_MOTION |
-        XCB_EVENT_MASK_FOCUS_CHANGE |
-        XCB_EVENT_MASK_STRUCTURE_NOTIFY,
-        0
-    ];
-
-    short h = 64;
-    short y = cast (short) (screen.width_in_pixels - h);
-
-    // Create the window
-    auto cookie =  // xcb_void_cookie_t 
-        xcb_create_window( 
-            c,                             // Connection          
-            XCB_COPY_FROM_PARENT,          // depth (same as root)
-            hwnd,                          // window Id           
-            screen.root,                   // parent window       
-            0, y,                          // x, y                
-            screen.width_in_pixels, h,     // width, height       
-            2,                             // border_width        
-            XCB_WINDOW_CLASS_INPUT_OUTPUT, // class               
-            screen.root_visual,            // visual              
-            value_mask,                    // masks
-            value_list.ptr                 // not used yet 
-        );                                 
-
-    // Map the window on the screen
-    xcb_map_window (c, hwnd);
-
-    // Make sure commands are sent before we pause, so window is shown
-    xcb_flush (c);    
-}
-
-
-void 
-new_gl_context (Display* display, xcb_connection_t *connection, int default_screen, xcb_screen_t *screen, xcb_window_t window, ref GLXDrawable drawable) {
+new_window (xcb_connection_t* c, Display* display, int default_screen, xcb_screen_t* screen, ref xcb_window_t hwnd, ref GLXDrawable drawable) {
+    // 1.
     static int[] 
     visual_attribs = [
         GLX_X_RENDERABLE,     True,
@@ -162,119 +118,128 @@ new_gl_context (Display* display, xcb_connection_t *connection, int default_scre
         None
     ];
 
-    int visualID = 0;
-
-    /* Query framebuffer configurations that match visual_attribs */
-    GLXFBConfig *fb_configs = null;
-    int num_fb_configs = 0;
+    // Query framebuffer configurations that match visual_attribs
+    GLXFBConfig* fb_configs;
+    int          num_fb_configs;
     fb_configs = glXChooseFBConfig (display, default_screen, visual_attribs.ptr, &num_fb_configs);
     if (!fb_configs || num_fb_configs == 0)
         throw new Exception ("glXGetFBConfigs failed");
 
-    writefln ("Found %d matching FB configs", num_fb_configs);
+    writefln ("FBConfig: Found %d matching FB configs", num_fb_configs);
 
-    /* Select first framebuffer config and query visualID */
+    // Select first framebuffer config and query visualID
+    int visualID;
     GLXFBConfig fb_config = fb_configs[0];
-    glXGetFBConfigAttrib (display, fb_config, GLX_VISUAL_ID , &visualID);
+    glXGetFBConfigAttrib (display,fb_config,GLX_VISUAL_ID,&visualID);
 
-    GLXContext context;
+    log ("visualID: ", visualID);
 
-    /* Create OpenGL context */
-    context = glXCreateNewContext (display, fb_config, GLX_RGBA_TYPE, null, True);
+    // Create OpenGL context
+    GLXContext context = 
+        glXCreateNewContext (display,fb_config,GLX_RGBA_TYPE,null,True);
     if (!context)
         throw new Exception ("glXCreateNewContext failed");
 
 
-/+
-    /* Create XID's for colormap and window */
-    xcb_colormap_t colormap = xcb_generate_id(connection);
-    xcb_window_t window = xcb_generate_id(connection);
-
-    /* Create colormap */
+    // 2.
+    // Create XID's for colormap and window
+    // Create colormap
+    xcb_colormap_t colormap = xcb_generate_id (c);
     xcb_create_colormap (
-        connection,
+        c,
         XCB_COLORMAP_ALLOC_NONE,
         colormap,
         screen.root,
         visualID
     );
-+/
 
-/+
-    /* Create window */
-    uint32_t   eventmask = XCB_EVENT_MASK_EXPOSURE | XCB_EVENT_MASK_KEY_PRESS;
-    uint32_t[] valuelist = [eventmask, colormap, 0];
-    uint32_t   valuemask = XCB_CW_EVENT_MASK | XCB_CW_COLORMAP;
+    // Ask for our window's Id
+    hwnd = xcb_generate_id (c);
 
-    xcb_create_window(
-        connection,
-        XCB_COPY_FROM_PARENT,
-        window,
-        screen.root,
-        0, 0,
-        150, 150,
-        0,
-        XCB_WINDOW_CLASS_INPUT_OUTPUT,
-        visualID,
-        valuemask,
-        valuelist.ptr
-        );
+    //
+    immutable(uint)   eventmask =
+        XCB_EVENT_MASK_EXPOSURE | 
+        XCB_EVENT_MASK_KEY_PRESS;
+        //XCB_EVENT_MASK_EXPOSURE |
+        //XCB_EVENT_MASK_KEY_PRESS |
+        //XCB_EVENT_MASK_KEY_RELEASE |
+        //XCB_EVENT_MASK_BUTTON_PRESS |
+        //XCB_EVENT_MASK_BUTTON_RELEASE |
+        //XCB_EVENT_MASK_POINTER_MOTION |
+        //XCB_EVENT_MASK_FOCUS_CHANGE |
+        //XCB_EVENT_MASK_STRUCTURE_NOTIFY,
+    immutable(uint[]) value_list = [
+        //screen.white_pixel,
+        eventmask,
+        colormap,
+        0
+    ];
+    immutable(uint)   value_mask = 
+        //XCB_CW_BACK_PIXEL | 
+        XCB_CW_EVENT_MASK |
+        XCB_CW_COLORMAP;
 
+    short h = 64;
+    short y = cast (short) (screen.width_in_pixels - h);
 
-    // NOTE: window must be mapped before glXMakeContextCurrent
-    xcb_map_window (connection, window); 
-+/
+    // Create the window
+    auto cookie =  // xcb_void_cookie_t 
+        xcb_create_window( 
+            c,                             // Connection          
+            XCB_COPY_FROM_PARENT,          // depth (same as root)
+            hwnd,                          // window Id
+            screen.root,                   // parent window       
+            0, y,                          // x, y                
+            screen.width_in_pixels, h,     // width, height       
+            0,                             // border_width
+            XCB_WINDOW_CLASS_INPUT_OUTPUT, // class               
+            visualID,                      // visual              
+            value_mask,                    // masks
+            value_list.ptr                 // not used yet 
+        );                                 
 
+    // Map the window on the screen
+    xcb_map_window (c,hwnd);
 
     // Create GLX Window
-    drawable = 0;
-
-    GLXWindow glxwindow = 
-        glXCreateWindow (
-            display,
-            fb_config,
-            window,
-            null
-        );
-
-    if (!glxwindow) {
-        xcb_destroy_window (connection, window);
-        glXDestroyContext (display, context);
-
+    GLXWindow glxwindow = glXCreateWindow (display,fb_config,hwnd,null);
+    if (!glxwindow)
         throw new Exception ("glxwindow failed");
-    }
-
-    drawable = glxwindow;
 
     // make OpenGL context current
-    if (!glXMakeContextCurrent (display, drawable, drawable, context)) {
-        xcb_destroy_window (connection, window);
-        glXDestroyContext (display, context);
-
+    drawable = glxwindow;
+    if (!glXMakeContextCurrent (display, drawable, drawable, context))
         throw new Exception ("glXMakeContextCurrent failed");
-    }
 
-
-    // Cleanup
-    //glXDestroyWindow(display, glxwindow);
-    //xcb_destroy_window(connection, window);
-    //glXDestroyContext(display, context);
+    // Make sure commands are sent before we pause, so window is shown
+    xcb_flush (c);    
 }
+
 
 alias Event = xcb_generic_event_t;
 
 void
-event_loop (xcb_connection_t* c, ref Frame frame) {
+event_loop (xcb_connection_t* c, Display* display, GLXDrawable drawable, ref Frame frame) {
     xcb_generic_event_t* e;
 
     while ((e = xcb_wait_for_event (c)) != null) {
-        import core.stdc.stdlib : free;
         log (e);
 
         //frame.event (e);
         //frame.update ();
-        //frame.draw ();
+        switch (e.response_type & ~0x80) {
+            case XCB_KEY_PRESS:
+                break;
+            case XCB_EXPOSE:
+                //frame.draw ();
+                glClearColor (0.2, 0.4, 0.9, 1.0);
+                glClear (GL_COLOR_BUFFER_BIT);
+                glXSwapBuffers (display,drawable);
+                break;
+            default:
+        }
 
+        import core.stdc.stdlib : free;
         free (e);
     }
 }

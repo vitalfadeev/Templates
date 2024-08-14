@@ -5,7 +5,7 @@ import x11.Xlib;
 
 extern (C) nothrow:
 
-// xcb_connection_t*	XGetXCBConnection(Display* dpy);
+//xcb_connection_t*	XGetXCBConnection(Display* dpy);
 
 enum XEventQueueOwner
 {

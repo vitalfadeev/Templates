@@ -14,12 +14,13 @@
 			"libs"           : [],
 			"dependencies"   : {
 				"xcb-d"         : {"path":"deps/xcb-d"},
-                "xau"           : { "path":"deps/xau" , "version":"*" },
+				"x11"           : {"path":"deps/x11"},
+				"xlib-d"        : {"path":"deps/xlib-d"},
+                "xau"           : {"path":"deps/xau"},
 				"bindbc-common" : {"path":"deps/bindbc-common"},
 				"bindbc-loader" : {"path":"deps/bindbc-loader"},
 				"bindbc-opengl" : {"path":"deps/bindbc-opengl"},
 				"glx-d"         : {"path":"deps/glx-d"},
-				"x11"           : {"path":"deps/x11"},
 			},
 		},
 	]

@@ -1,0 +1,26 @@
+{
+	"authors": [
+		"Remi Thebault"
+	],
+	"configurations": [
+		{
+			"name": "library",
+			"targetType": "library"
+		}
+	],
+	"copyright": "Copyright © 2015, 2020, Remi Thebault",
+	"description": "D bindings to Xlib",
+	"importPaths": [
+		"source/"
+	],
+	"libs": [
+		"X11",
+		"X11-xcb"
+	],
+	"license": "MIT",
+	"name": "xlib-d",
+	"sourcePaths": [
+		"source/"
+	],
+	"version": "0.3.0"
+}
