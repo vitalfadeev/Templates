@@ -34,6 +34,9 @@ main () {
     GLXDrawable  drawable;
     new_window (c,display,default_screen,screen,hwnd,drawable);
 
+    // GL
+    init_gl();
+
     // Init GUI tree
     auto frame = Frame ();
     frame._init ();
@@ -95,6 +98,29 @@ new_screen (xcb_connection_t* c, int default_screen, ref xcb_screen_t* screen) {
     log ( "Screen: width x height (in pixels): ", screen.width_in_pixels, "x", screen.height_in_pixels );    
 }
 
+void
+init_gl (/*SDL_Window* window,SDL_GLContext glc*/) {
+    //SDL_GL_SetAttribute (SDL_GL_CONTEXT_FLAGS, 0);
+    //SDL_GL_SetAttribute (SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
+    //SDL_GL_SetAttribute (SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+    //SDL_GL_SetAttribute (SDL_GL_CONTEXT_MINOR_VERSION, 0);
+    //SDL_GL_SetAttribute (SDL_GL_DOUBLEBUFFER, 1);
+    //SDL_GL_SetAttribute (SDL_GL_DEPTH_SIZE, 24);
+    //SDL_GL_SetAttribute (SDL_GL_ACCELERATED_VISUAL,1);
+    //SDL_GL_SetAttribute (SDL_GL_STENCIL_SIZE, 8);
+
+    //SDL_GL_LoadLibrary ("libGL.so");
+    //SDL_GL_LoadLibrary ("libEGL.so");
+    import bindbc.opengl;
+
+    const GLSupport openglLoaded = loadOpenGL ();
+    log (glSupport);
+    if ( openglLoaded != glSupport) {
+        import std.conv : to;
+        log ("Error loading OpenGL shared library: ", to!string (openglLoaded));
+        throw new Exception ("Error loading OpenGL shared library");
+    }
+}
 
 
 void
@@ -200,6 +226,7 @@ new_window (xcb_connection_t* c, Display* display, int default_screen, xcb_scree
 
     // Map the window on the screen
     xcb_map_window (c,hwnd);
+    xcb_flush (c);
 
     // Create GLX Window
     GLXWindow glxwindow = glXCreateWindow (display,fb_config,hwnd,null);
@@ -212,7 +239,6 @@ new_window (xcb_connection_t* c, Display* display, int default_screen, xcb_scree
         throw new Exception ("glXMakeContextCurrent failed");
 
     // Make sure commands are sent before we pause, so window is shown
-    xcb_flush (c);    
 }
 
 
