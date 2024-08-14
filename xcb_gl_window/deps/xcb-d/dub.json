@@ -1,0 +1,25 @@
+{
+	"authors": [
+		"Dan Printzell"
+	],
+	"configurations": [
+		{
+			"name": "library",
+			"targetType": "library"
+		}
+	],
+	"copyright": "Copyright © 2015, Dan Printzell",
+	"description": "XCB D binding",
+	"importPaths": [
+		"source/"
+	],
+	"libs": [
+		"xcb"
+	],
+	"license": "MIT",
+	"name": "xcb-d",
+	"sourcePaths": [
+		"source/"
+	],
+	"version": "2.1.1+1.11.1"
+}

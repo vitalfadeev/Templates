@@ -1,0 +1,35 @@
+{
+	"authors": [
+		"Aya Partridge",
+		"Mike Parker"
+	],
+	"configurations": [
+		{
+			"name": "noBC",
+			"targetType": "staticLibrary"
+		},
+		{
+			"buildOptions": [
+				"betterC"
+			],
+			"name": "yesBC",
+			"targetType": "staticLibrary"
+		}
+	],
+	"description": "Cross-platform shared library loader usable with BetterC.",
+	"importPaths": [
+		"source/"
+	],
+	"libs-linux": [
+		"dl"
+	],
+	"license": "BSL-1.0",
+	"name": "bindbc-loader",
+	"sourcePaths": [
+		"source/"
+	],
+	"targetName": "BindBC_Loader",
+	"targetPath": "lib",
+	"targetType": "staticLibrary",
+	"version": "1.1.5"
+}

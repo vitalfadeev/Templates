@@ -1,0 +1,56 @@
+{
+	"authors": [
+		"Walter Bright"
+	],
+	"configurations": [
+		{
+			"libs-linux": [
+				"X11"
+			],
+			"name": "library",
+			"targetType": "library"
+		},
+		{
+			"libs-linux": [
+				"X11"
+			],
+			"name": "application",
+			"targetType": "executable"
+		},
+		{
+			"excludedSourceFiles": [
+				"source/x11/keysym.d",
+				"source/x11/keysymdef.d",
+				"source/x11/Xlib_xcb.d",
+				"source/x11/XlibConf.d",
+				"source/x11/Xlibint.d",
+				"source/x11/Xmd.d",
+				"source/x11/Xproto.d",
+				"source/x11/Xprotostr.d",
+				"source/x11/Xregion.d",
+				"source/x11/Xresource.d",
+				"source/x11/Xtos.d",
+				"source/x11/Xutil.d",
+				"source/x11/extensions/*",
+				"source/x11/Xproto_undef.d",
+				"source/x11/Xatom.d"
+			],
+			"name": "tcltk-import",
+			"targetType": "library"
+		}
+	],
+	"description": "Bindings to X11 for the D programming language",
+	"excludedSourceFiles": [
+		"source/c/*"
+	],
+	"homepage": "https://github.com/nomad-software/x11",
+	"importPaths": [
+		"source/"
+	],
+	"license": "Boost Software License",
+	"name": "x11",
+	"sourcePaths": [
+		"source/"
+	],
+	"version": "1.0.21"
+}
