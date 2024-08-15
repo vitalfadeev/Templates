@@ -9,7 +9,6 @@ import x11.X        : None;
 import glx.glx;
 
 
-
 void 
 main () {
     // INIT
@@ -38,7 +37,7 @@ main () {
     init_gl();
 
     // Init GUI tree
-    auto frame = Frame ();
+    auto frame = Frame (display,drawable);
     frame._init ();
 
     // EVENT LOOP
@@ -181,13 +180,11 @@ new_window (xcb_connection_t* c, Display* display, int default_screen, xcb_scree
         //XCB_EVENT_MASK_FOCUS_CHANGE |
         //XCB_EVENT_MASK_STRUCTURE_NOTIFY,
     immutable(uint[]) value_list = [
-        //screen.white_pixel,
         eventmask,
         colormap,
         0
     ];
     immutable(uint)   value_mask = 
-        //XCB_CW_BACK_PIXEL | 
         XCB_CW_EVENT_MASK |
         XCB_CW_COLORMAP;
 
@@ -228,8 +225,6 @@ new_window (xcb_connection_t* c, Display* display, int default_screen, xcb_scree
 }
 
 
-alias Event = xcb_generic_event_t;
-
 void
 event_loop (xcb_connection_t* c, Display* display, GLXDrawable drawable, ref Frame frame) {
     xcb_generic_event_t* e;
@@ -237,27 +232,21 @@ event_loop (xcb_connection_t* c, Display* display, GLXDrawable drawable, ref Fra
     while ((e = xcb_wait_for_event (c)) != null) {
         log (e);
 
-        //frame.event (e);
-        //frame.update ();
-        switch (e.response_type & ~0x80) {
-            case XCB_KEY_PRESS:
-                break;
-            case XCB_EXPOSE:
-                //frame.draw ();
-                glClearColor (0.2, 0.4, 0.9, 1.0);
-                glClear (GL_COLOR_BUFFER_BIT);
-                glXSwapBuffers (display,drawable);
-                break;
-            default:
-        }
+        frame.event (e);
+        frame.update ();
 
         import core.stdc.stdlib : free;
         free (e);
     }
 }
 
+alias Event = xcb_generic_event_t*;
+
 struct
 Frame {
+    Display*    display;
+    GLXDrawable drawable;
+
     void
     _init () {
         //
@@ -265,7 +254,14 @@ Frame {
 
     void
     event (Event e) {
-        //
+        switch (e.response_type & ~0x80) {
+            case XCB_KEY_PRESS:
+                break;
+            case XCB_EXPOSE:
+                draw ();
+                break;
+            default:
+        }
     }
 
     void
@@ -275,7 +271,9 @@ Frame {
 
     void
     draw () {
-        //
+        glClearColor (0.2, 0.4, 0.9, 1.0);
+        glClear (GL_COLOR_BUFFER_BIT);
+        glXSwapBuffers (display,drawable);
     }
 }
 
