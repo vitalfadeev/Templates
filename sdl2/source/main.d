@@ -10,70 +10,18 @@ main () {
     init_sdl ();
 
     // Window, Surface
-    SDL_Window*  window;
-    new_window (window);
+    SDL_Window* window = new_window ();
 
     // Renderer
-    SDL_Renderer* renderer;
-    new_renderer (window, renderer);
+    SDL_Renderer* renderer = new_renderer (window);
 
     // Event Loop
-    event_loop:
-    foreach (Event* ev; Events ()) {
-        switch (ev.type) {
-            case SDL_QUIT:
-                break event_loop;
-            case SDL_MOUSEBUTTONDOWN:
-                // ...
-                break;
-            case SDL_WINDOWEVENT:
-                switch (ev.window.event) {
-                    case SDL_WINDOWEVENT_EXPOSED: // event.window.windowID
-                        // Draw
-                        draw (renderer);
-                        // Rasterize
-                        SDL_RenderPresent (renderer);
-                        break;
-                    case SDL_WINDOWEVENT_SHOWN: break;        // event.window.windowID
-                    case SDL_WINDOWEVENT_HIDDEN: break;       // event.window.windowID
-                    case SDL_WINDOWEVENT_MOVED: break;        // event.window.windowID event.window.data1 event.window.data2
-                    case SDL_WINDOWEVENT_RESIZED: break;      // event.window.windowID event.window.data1 event.window.data2 (width height)
-                    case SDL_WINDOWEVENT_SIZE_CHANGED: break; // event.window.windowID event.window.data1 event.window.data2 (width height)
-                    case SDL_WINDOWEVENT_MINIMIZED: break;    // event.window.windowID
-                    case SDL_WINDOWEVENT_MAXIMIZED: break;    // event.window.windowID
-                    case SDL_WINDOWEVENT_RESTORED: break;     // event.window.windowID
-                    case SDL_WINDOWEVENT_ENTER: break;        // event.window.windowID
-                    case SDL_WINDOWEVENT_LEAVE: break;        // event.window.windowID
-                    case SDL_WINDOWEVENT_FOCUS_GAINED: break; // event.window.windowID
-                    case SDL_WINDOWEVENT_FOCUS_LOST: break;   // event.window.windowID
-                    case SDL_WINDOWEVENT_CLOSE: break;        // event.window.windowID
-                    case SDL_WINDOWEVENT_TAKE_FOCUS: break;   // event.window.windowID
-                    case SDL_WINDOWEVENT_HIT_TEST: break;     // event.window.windowID
-                    default:
-                        SDL_Log ("Window %d got unknown event %d",
-                            ev.window.windowID, ev.window.event);
-                }
-                break;
-            default:
-        }
-    }
+    foreach (Event* ev; Events ())
+        if (event (ev, window, renderer) == 1)
+            break;
 
     return 0;
 }
-
-
-void
-draw (SDL_Renderer* renderer) {
-    // SDL_SetRenderDrawColor (renderer, 0x00, 0x00, 0x00, 0xFF);
-    // SDL_RenderClear (renderer);
-    // SDL_SetRenderDrawColor (renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-    // SDL_RenderDrawPoint (renderer, x, y);
-    // SDL_RenderDrawLine (renderer,0,0,100,100);
-    // SDL_RenderFillRect (renderer,&rect);
-    // SDL_RenderDrawRect (renderer,&rect);
-    // ...
-}
-
 
 //
 void 
@@ -93,10 +41,10 @@ init_sdl () {
 
 
 //
-void 
-new_window (ref SDL_Window* window) {
+SDL_Window* 
+new_window () {
     // Window
-    window = 
+    SDL_Window* window = 
         SDL_CreateWindow (
             __FILE_FULL_PATH__, // "SDL2 Window",
             SDL_WINDOWPOS_CENTERED,
@@ -110,13 +58,15 @@ new_window (ref SDL_Window* window) {
 
     // Update
     SDL_UpdateWindowSurface (window);
+
+    return window;
 }
 
 
 //
-void 
-new_renderer (SDL_Window* window, ref SDL_Renderer* renderer) {
-    renderer = SDL_CreateRenderer (window, -1, SDL_RENDERER_SOFTWARE);
+SDL_Renderer* 
+new_renderer (SDL_Window* window) {
+    return SDL_CreateRenderer (window, -1, SDL_RENDERER_SOFTWARE);
 }
 
 
@@ -152,4 +102,61 @@ struct
 Event {
     SDL_Event _e;
     alias _e this;
+}
+
+
+int
+event (Event* ev, SDL_Window* window, SDL_Renderer* renderer) {
+    switch (ev._e.type) {
+        case SDL_QUIT:
+            return 1;
+            break;
+        case SDL_MOUSEBUTTONDOWN:
+            // ...
+            break;
+        case SDL_WINDOWEVENT:
+            switch (ev.window.event) {
+                case SDL_WINDOWEVENT_EXPOSED: // event.window.windowID
+                    // Draw
+                    draw (renderer);
+                    // Rasterize
+                    SDL_RenderPresent (renderer);
+                    break;
+                case SDL_WINDOWEVENT_SHOWN: break;        // event.window.windowID
+                case SDL_WINDOWEVENT_HIDDEN: break;       // event.window.windowID
+                case SDL_WINDOWEVENT_MOVED: break;        // event.window.windowID event.window.data1 event.window.data2 (x y)
+                case SDL_WINDOWEVENT_RESIZED: break;      // event.window.windowID event.window.data1 event.window.data2 (width height)
+                case SDL_WINDOWEVENT_SIZE_CHANGED: break; // event.window.windowID event.window.data1 event.window.data2 (width height)
+                case SDL_WINDOWEVENT_MINIMIZED: break;    // event.window.windowID
+                case SDL_WINDOWEVENT_MAXIMIZED: break;    // event.window.windowID
+                case SDL_WINDOWEVENT_RESTORED: break;     // event.window.windowID
+                case SDL_WINDOWEVENT_ENTER: break;        // event.window.windowID
+                case SDL_WINDOWEVENT_LEAVE: break;        // event.window.windowID
+                case SDL_WINDOWEVENT_FOCUS_GAINED: break; // event.window.windowID
+                case SDL_WINDOWEVENT_FOCUS_LOST: break;   // event.window.windowID
+                case SDL_WINDOWEVENT_CLOSE: break;        // event.window.windowID
+                case SDL_WINDOWEVENT_TAKE_FOCUS: break;   // event.window.windowID
+                case SDL_WINDOWEVENT_HIT_TEST: break;     // event.window.windowID
+                default:
+                    SDL_Log ("Window %d got unknown event %d",
+                        ev.window.windowID, ev.window.event);
+            }
+            break;
+        default:
+    }
+
+    return 0;
+}
+
+
+void
+draw (SDL_Renderer* renderer) {
+    // SDL_SetRenderDrawColor (renderer, 0x00, 0x00, 0x00, 0xFF);
+    // SDL_RenderClear (renderer);
+    // SDL_SetRenderDrawColor (renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+    // SDL_RenderDrawPoint (renderer, x, y);
+    // SDL_RenderDrawLine (renderer,0,0,100,100);
+    // SDL_RenderFillRect (renderer,&rect);
+    // SDL_RenderDrawRect (renderer,&rect);
+    // ...
 }
