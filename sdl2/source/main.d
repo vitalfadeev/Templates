@@ -28,13 +28,30 @@ main () {
                 break;
             case SDL_WINDOWEVENT:
                 switch (ev.window.event) {
-                    case SDL_WINDOWEVENT_EXPOSED:
+                    case SDL_WINDOWEVENT_EXPOSED: // event.window.windowID
                         // Draw
                         draw (renderer);
                         // Rasterize
                         SDL_RenderPresent (renderer);
                         break;
+                    case SDL_WINDOWEVENT_SHOWN: break;        // event.window.windowID
+                    case SDL_WINDOWEVENT_HIDDEN: break;       // event.window.windowID
+                    case SDL_WINDOWEVENT_MOVED: break;        // event.window.windowID event.window.data1 event.window.data2
+                    case SDL_WINDOWEVENT_RESIZED: break;      // event.window.windowID event.window.data1 event.window.data2 (width height)
+                    case SDL_WINDOWEVENT_SIZE_CHANGED: break; // event.window.windowID event.window.data1 event.window.data2 (width height)
+                    case SDL_WINDOWEVENT_MINIMIZED: break;    // event.window.windowID
+                    case SDL_WINDOWEVENT_MAXIMIZED: break;    // event.window.windowID
+                    case SDL_WINDOWEVENT_RESTORED: break;     // event.window.windowID
+                    case SDL_WINDOWEVENT_ENTER: break;        // event.window.windowID
+                    case SDL_WINDOWEVENT_LEAVE: break;        // event.window.windowID
+                    case SDL_WINDOWEVENT_FOCUS_GAINED: break; // event.window.windowID
+                    case SDL_WINDOWEVENT_FOCUS_LOST: break;   // event.window.windowID
+                    case SDL_WINDOWEVENT_CLOSE: break;        // event.window.windowID
+                    case SDL_WINDOWEVENT_TAKE_FOCUS: break;   // event.window.windowID
+                    case SDL_WINDOWEVENT_HIT_TEST: break;     // event.window.windowID
                     default:
+                        SDL_Log ("Window %d got unknown event %d",
+                            ev.window.windowID, ev.window.event);
                 }
                 break;
             default:
