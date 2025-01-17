@@ -18,10 +18,43 @@ main () {
     new_renderer (window, renderer);
 
     // Event Loop
-    Frame frame;
-    event_loop (window, renderer, frame);
+    event_loop:
+    foreach (Event* ev; Events ()) {
+        switch (ev.type) {
+            case SDL_QUIT:
+                break event_loop;
+            case SDL_MOUSEBUTTONDOWN:
+                // ...
+                break;
+            case SDL_WINDOWEVENT:
+                switch (ev.window.event) {
+                    case SDL_WINDOWEVENT_EXPOSED:
+                        // Draw
+                        draw (renderer);
+                        // Rasterize
+                        SDL_RenderPresent (renderer);
+                        break;
+                    default:
+                }
+                break;
+            default:
+        }
+    }
 
     return 0;
+}
+
+
+void
+draw (SDL_Renderer* renderer) {
+    // SDL_SetRenderDrawColor (renderer, 0x00, 0x00, 0x00, 0xFF);
+    // SDL_RenderClear (renderer);
+    // SDL_SetRenderDrawColor (renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+    // SDL_RenderDrawPoint (renderer, x, y);
+    // SDL_RenderDrawLine (renderer,0,0,100,100);
+    // SDL_RenderFillRect (renderer,&rect);
+    // SDL_RenderDrawRect (renderer,&rect);
+    // ...
 }
 
 
@@ -71,40 +104,6 @@ new_renderer (SDL_Window* window, ref SDL_Renderer* renderer) {
 
 
 //
-void 
-event_loop (ref SDL_Window* window, SDL_Renderer* renderer, ref Frame frame) {
-    bool _go = true;
-
-    while (_go) {
-        SDL_Event e;
-
-        while (SDL_PollEvent (&e) > 0) {
-            // Process Event
-            // Process Event
-            switch (e.type) {
-                case SDL_QUIT:
-                    _go = false;
-                    break;
-                case SDL_MOUSEBUTTONDOWN:
-                    frame.event (&e);
-                    break;
-                default:
-            }
-
-            // Draw
-            frame.draw (renderer);
-
-            // Rasterize
-            SDL_RenderPresent (renderer);
-        }
-
-        // Delay
-        SDL_Delay (100);
-    }        
-}
-
-
-//
 class 
 SDLException : Exception {
     this (string msg) {
@@ -113,28 +112,27 @@ SDLException : Exception {
 }
 
 
-//
 struct
-Frame {
-    void
-    draw (SDL_Renderer* renderer) {
-        // SDL_SetRenderDrawColor (renderer, 0x00, 0x00, 0x00, 0x00);
-        // SDL_RenderClear (renderer);
-        // SDL_SetRenderDrawColor (renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-        // SDL_RenderDrawPoint (renderer, x, y);
-        // SDL_RenderDrawLine (renderer,0,0,100,100);
-        // SDL_RenderFillRect (renderer,&rect);
-        // SDL_RenderDrawRect (renderer,&rect);
-        // ...
-    }
+Events {
+    bool _go = true;
+    Event ev;
 
-    void
-    event (SDL_Event* e) {
-        switch (e.type) {
-            case SDL_MOUSEBUTTONDOWN:
-                // ...
-                break;
-            default:
-        }
+    int
+    opApply (int delegate (Event* ev) dg) {
+        while (_go) {
+            while (SDL_WaitEvent (&ev._e) > 0) {
+                int result = dg (&ev);
+                if (result)
+                    return result;
+            }
+        }        
+
+        return 0;
     }
+}
+
+struct
+Event {
+    SDL_Event _e;
+    alias _e this;
 }
