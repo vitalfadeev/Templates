@@ -107,7 +107,7 @@ Event {
 
 int
 event (Event* ev, SDL_Window* window, SDL_Renderer* renderer) {
-    switch (ev._e.type) {
+    switch (ev.type) {
         case SDL_QUIT:
             return 1;
             break;
