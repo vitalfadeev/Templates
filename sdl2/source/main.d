@@ -116,12 +116,7 @@ event (Event* ev, SDL_Window* window, SDL_Renderer* renderer) {
             break;
         case SDL_WINDOWEVENT:
             switch (ev.window.event) {
-                case SDL_WINDOWEVENT_EXPOSED: // event.window.windowID
-                    // Draw
-                    draw (renderer);
-                    // Rasterize
-                    SDL_RenderPresent (renderer);
-                    break;
+                case SDL_WINDOWEVENT_EXPOSED: draw (renderer); break; // event.window.windowID
                 case SDL_WINDOWEVENT_SHOWN: break;        // event.window.windowID
                 case SDL_WINDOWEVENT_HIDDEN: break;       // event.window.windowID
                 case SDL_WINDOWEVENT_MOVED: break;        // event.window.windowID event.window.data1 event.window.data2 (x y)
@@ -159,4 +154,7 @@ draw (SDL_Renderer* renderer) {
     // SDL_RenderFillRect (renderer,&rect);
     // SDL_RenderDrawRect (renderer,&rect);
     // ...
+
+    // Rasterize
+    SDL_RenderPresent (renderer);
 }
