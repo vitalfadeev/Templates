@@ -9,6 +9,8 @@ alias log = writeln;
 enum window_width  = 512;
 enum window_height = 512;
 
+GLES2 _gl;
+
 
 void 
 main() {
@@ -16,19 +18,21 @@ main() {
     init_sdl ();
 
     // Window, Surface
-    SDL_Window* window;
-    new_window (window);
+    SDL_Window* window = new_window ();
 
     // OpenGL context
-    SDL_GLContext glc;
-    new_gl_context (window,glc);
+    SDL_GLContext glc = new_gl_context (window);
 
     //
     init_gl (window,glc);
+    _gl._init ();
 
     // Event Loop
-    auto frame = Frame (window);
-    event_loop (window,frame);
+    //auto frame = Frame (window);
+    //event_loop (window,frame);
+    foreach (Event* ev; Events ())
+        if (event (ev, window) == 1)
+            break;
 }
 
 
@@ -50,10 +54,10 @@ init_sdl () {
 
 
 //
-void 
-new_window (ref SDL_Window* window) {
+SDL_Window* 
+new_window () {
     // Window
-    window = 
+    SDL_Window* window = 
         SDL_CreateWindow (
             __FILE_FULL_PATH__, // "SDL2 Window",
             SDL_WINDOWPOS_CENTERED,
@@ -67,17 +71,18 @@ new_window (ref SDL_Window* window) {
 
     // Update
     SDL_UpdateWindowSurface (window);
+
+    return window;
 }
 
 
 
-auto
-new_gl_context (SDL_Window* window, ref SDL_GLContext glc) {
+SDL_GLContext
+new_gl_context (SDL_Window* window) {
     // Create context for OpenGL window
-    glc = SDL_GL_CreateContext (window);
+    SDL_GLContext glc = SDL_GL_CreateContext (window);
     if (glc is null) {
         throw new SDLException ("[SDL] GL context creation failed!");
-        return -1;
     }
 
     // Set context as current
@@ -99,7 +104,7 @@ new_gl_context (SDL_Window* window, ref SDL_GLContext glc) {
     SDL_GL_GetAttribute (SDL_GL_CONTEXT_MINOR_VERSION,&GLMinorVer);
     log ("OpenGL version: ",GLMajorVer,".",GLMinorVer);
 
-    return 0;
+    return glc;
 }
 
 
@@ -148,41 +153,36 @@ else {
 
 
 //
-void 
-event_loop (ref SDL_Window* window, ref Frame frame) {
+struct
+Event {
+    SDL_Event _e;
+    alias _e this;
+    //Type type;
+    //enum
+    //Type {
+    //    none,
+    //    click,
+    //    draw,
+    //}
+}
+
+struct
+Events {
     bool _go = true;
+    Event ev;
 
-    while (_go) {
-        SDL_Event e;
-
-        while (SDL_WaitEvent (&e) > 0) {
-            // Process Event
-            // Process Event
-            switch (e.type) {
-                case SDL_QUIT:
-                    _go = false;
-                    return;
-                    break;
-                case SDL_MOUSEBUTTONDOWN:
-                    frame.event (&e);
-                    return;
-                    break;
-                case SDL_KEYDOWN:
-                    frame.event (&e);
-                    break;
-                case SDL_MOUSEMOTION:
-                    frame.event (&e);
-                    break;
-                default:
+    int
+    opApply (int delegate (Event* ev) dg) {
+        while (_go) {
+            while (SDL_WaitEvent (&ev._e) > 0) {
+                int result = dg (&ev);
+                if (result)
+                    return result;
             }
+        }        
 
-            // Draw
-            frame.draw (window);
-        }
-
-        // Delay
-        //SDL_Delay (100);
-    }        
+        return 0;
+    }
 }
 
 
@@ -195,120 +195,140 @@ SDLException : Exception {
 }
 
 
-struct
-Frame {
-    SDL_Window* window;
-    GLES2       gl;
+void
+draw (SDL_Window* window) {
+    _clear_buffer ();
+    _render_scene ();
+    _update_window (window);
+}
 
-    this (SDL_Window* window) {
-        this.window = window;
-        this.gl._init ();
+
+void
+_clear_buffer () {
+	glViewport (0, 0, window_width, window_width);
+	glClearColor (0.2f, 0.2f, 0.2f, 1.0f);
+	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void
+_render_scene () {
+    Point[] 
+    _test_triangle_verts = [
+        Point (  0.0f,  0.5f),
+        Point ( -0.5f, -0.5f),
+        Point (  0.5f, -0.5f),
+    ]; 
+    draw_triangle (_test_triangle_verts);
+    //draw_triangle_at (_test_triangle_verts);
+    //draw_line (Pos (0,0), Pos (1,1));
+    draw_bold_line (Pos (0,0), Pos (1,1), 1.0/window_width*50,1.0/window_width*50);
+}
+
+void
+_update_window (SDL_Window* window) {
+	SDL_GL_SwapWindow (window);	    
+}
+
+void
+draw_triangle (Point[] points) {
+    auto program = _gl.context.user_data.basic_program;
+    program.use ();
+    program.ray (points);
+
+    glDrawArrays (
+        GL_LINE_LOOP, 
+        /* first */ 0, 
+        /* count */ cast (GLsizei) points.length
+    );
+}
+
+void
+draw_triangle_at (Point[] points) {
+    auto program = _gl.context.user_data.translate_program;
+    program.use ();
+    program.ray (points);
+    program.translate ([-1.0,-1.0]);
+
+    glDrawArrays (
+        GL_LINE_LOOP, 
+        /* first */ 0, 
+        /* count */ cast (GLsizei) points.length
+    );
+}
+
+void
+draw_line (Pos a, Pos b) {
+    Point[] points = [a,b];
+    auto program = _gl.context.user_data.basic_program;
+    program.use ();
+    program.ray (points);
+
+    glDrawArrays (
+        GL_LINE_LOOP, 
+        /* first */ 0, 
+        /* count */ cast (GLsizei) points.length
+    );
+}
+
+void
+draw_bold_line (Pos a, Pos b, float wl, float wr) {
+    Point[] points = [a,b];
+    auto program = _gl.context.user_data.basic_program;
+    program.use ();
+    program.ray (points);
+
+    glDrawArrays (
+        GL_LINE_LOOP, 
+        /* first */ 0, 
+        /* count */ cast (GLsizei) points.length
+    );
+}
+
+int
+event (Event* ev, SDL_Window* window) {
+    switch (ev.type) {
+        case SDL_QUIT:
+            return 1;
+            break;
+        case SDL_KEYDOWN:
+            break;
+        case SDL_MOUSEMOTION:
+            break;
+        case SDL_MOUSEBUTTONDOWN:
+            break;
+        case SDL_WINDOWEVENT:
+            switch (ev.window.event) {
+                case SDL_WINDOWEVENT_EXPOSED: draw (window); break; // event.window.windowID
+                case SDL_WINDOWEVENT_SHOWN: break;        // event.window.windowID
+                case SDL_WINDOWEVENT_HIDDEN: break;       // event.window.windowID
+                case SDL_WINDOWEVENT_MOVED: break;        // event.window.windowID event.window.data1 event.window.data2 (x y)
+                case SDL_WINDOWEVENT_RESIZED: break;      // event.window.windowID event.window.data1 event.window.data2 (width height)
+                case SDL_WINDOWEVENT_SIZE_CHANGED: break; // event.window.windowID event.window.data1 event.window.data2 (width height)
+                case SDL_WINDOWEVENT_MINIMIZED: break;    // event.window.windowID
+                case SDL_WINDOWEVENT_MAXIMIZED: break;    // event.window.windowID
+                case SDL_WINDOWEVENT_RESTORED: break;     // event.window.windowID
+                case SDL_WINDOWEVENT_ENTER: break;        // event.window.windowID
+                case SDL_WINDOWEVENT_LEAVE: break;        // event.window.windowID
+                case SDL_WINDOWEVENT_FOCUS_GAINED: break; // event.window.windowID
+                case SDL_WINDOWEVENT_FOCUS_LOST: break;   // event.window.windowID
+                case SDL_WINDOWEVENT_CLOSE: break;        // event.window.windowID
+                //case SDL_WINDOWEVENT_TAKE_FOCUS: break;   // event.window.windowID
+                //case SDL_WINDOWEVENT_HIT_TEST: break;     // event.window.windowID
+                default:
+                    SDL_Log ("Window %d got unknown event %d",
+                        ev.window.windowID, ev.window.event);
+            }
+            break;
+        case SDL_USEREVENT:
+            string us;
+            switch (us) {
+                case "player.play_pause": break;
+                default:
+            }
+            break;
+        default:
     }
 
-    void
-    draw (SDL_Window* window) {
-        _clear_buffer ();
-        _render_scene ();
-        _update_window (window);
-    }
-
-	void
-	_clear_buffer () {
-		glViewport (0, 0, window_width, window_width);
-		glClearColor (0.2f, 0.2f, 0.2f, 1.0f);
-		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	}
-
-	void
-	_render_scene () {
-        Point[] 
-        _test_triangle_verts = [
-            Point (  0.0f,  0.5f),
-            Point ( -0.5f, -0.5f),
-            Point (  0.5f, -0.5f),
-        ]; 
-        draw_triangle (_test_triangle_verts);
-        //draw_triangle_at (_test_triangle_verts);
-        //draw_line (Pos (0,0), Pos (1,1));
-        draw_bold_line (Pos (0,0), Pos (1,1), 1.0/window_width*50,1.0/window_width*50);
-	}
-
-	void
-	_update_window (SDL_Window* window) {
-		SDL_GL_SwapWindow (window);	    
-	}
-
-    void
-    draw_triangle (Point[] points) {
-        auto program = gl.context.user_data.basic_program;
-        program.use ();
-        program.ray (points);
-
-        glDrawArrays (
-            GL_LINE_LOOP, 
-            /* first */ 0, 
-            /* count */ cast (GLsizei) points.length
-        );
-    }
-
-    void
-    draw_triangle_at (Point[] points) {
-        auto program = gl.context.user_data.translate_program;
-        program.use ();
-        program.ray (points);
-        program.translate ([-1.0,-1.0]);
-
-        glDrawArrays (
-            GL_LINE_LOOP, 
-            /* first */ 0, 
-            /* count */ cast (GLsizei) points.length
-        );
-    }
-
-    void
-    draw_line (Pos a, Pos b) {
-        Point[] points = [a,b];
-        auto program = gl.context.user_data.basic_program;
-        program.use ();
-        program.ray (points);
-
-        glDrawArrays (
-            GL_LINE_LOOP, 
-            /* first */ 0, 
-            /* count */ cast (GLsizei) points.length
-        );
-    }
-
-    void
-    draw_bold_line (Pos a, Pos b, float wl, float wr) {
-        Point[] points = [a,b];
-        auto program = gl.context.user_data.basic_program;
-        program.use ();
-        program.ray (points);
-
-        glDrawArrays (
-            GL_LINE_LOOP, 
-            /* first */ 0, 
-            /* count */ cast (GLsizei) points.length
-        );
-    }
-
-	void
-	event (SDL_Event* e) {
-	    switch (e.type) {
-	        case SDL_MOUSEBUTTONDOWN:
-	            // ...
-	            break;
-	        case SDL_MOUSEMOTION:
-	            on_mouse_motion (&e.motion);
-	            break;
-	        default:
-	    }
-	}
-
-	void
-	on_mouse_motion (SDL_MouseMotionEvent* e) {
-		//
-	}
+    return 0;
 }
 
