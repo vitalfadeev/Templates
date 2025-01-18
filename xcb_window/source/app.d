@@ -9,32 +9,36 @@ main () {
     // INIT
     // CONNECT
     bool auth_flag = true;
-    xcb_connection_t* c;
-    new_connection (auth_flag, c);
+    xcb_connection_t* c = new_connection (auth_flag);
 
     // Get the first screen
     // screen = xcb_setup_roots_iterator( xcb_get_setup( c ) )[prefered_screen].data;
-    xcb_screen_t* screen;
-    new_screen (c,screen);
+    xcb_screen_t* screen = new_screen (c);
 
     // WINDOW
-    xcb_window_t hwnd;
-    new_window (c,screen,hwnd);
-
-    // Init GUI tree
-    auto frame = Frame ();
-    frame._init ();
+    xcb_window_t hwnd = new_window (c,screen);
 
     // EVENT LOOP
-    event_loop (c,frame);
+    foreach (Event* ev; Events (c)) {
+        switch (ev.response_type & ~0x80) {
+            case XCB_KEY_PRESS:
+                break;
+            case XCB_EXPOSE:
+                draw (c,screen,hwnd);
+                break;
+            default:
+        }
+    }
 
     //
     xcb_disconnect (c);
 }
 
 
-void
-new_connection (bool auth_flag, ref xcb_connection_t* c) {
+xcb_connection_t*
+new_connection (bool auth_flag) {
+    xcb_connection_t* c;
+
     if (auth_flag) {
         const char* display;
         int         prefered_screen;
@@ -54,19 +58,21 @@ new_connection (bool auth_flag, ref xcb_connection_t* c) {
             throw new XCBException ("Cannot open display", c);
     }
     
+    return c;
 }
 
-void
-new_screen (xcb_connection_t* c, ref xcb_screen_t* screen) {
-    screen = xcb_setup_roots_iterator (xcb_get_setup (c)).data;
-    log ( "width x height (in pixels): ", screen.width_in_pixels, "x", screen.height_in_pixels );    
+xcb_screen_t*
+new_screen (xcb_connection_t* c) {
+    xcb_screen_t* screen = xcb_setup_roots_iterator (xcb_get_setup (c)).data;
+    log ( "width x height (in pixels): ", screen.width_in_pixels, "x", screen.height_in_pixels );
+    return screen;
 }
 
 
-void
-new_window (xcb_connection_t* c, xcb_screen_t* screen, ref xcb_window_t hwnd) {
+xcb_window_t
+new_window (xcb_connection_t* c, xcb_screen_t* screen) {
     // Ask for our window's Id
-    hwnd = xcb_generate_id (c);
+    xcb_window_t hwnd = xcb_generate_id (c);
 
     //
     immutable(uint)   value_mask = 
@@ -109,47 +115,40 @@ new_window (xcb_connection_t* c, xcb_screen_t* screen, ref xcb_window_t hwnd) {
 
     // Make sure commands are sent before we pause, so window is shown
     xcb_flush (c);    
+
+    return hwnd;
 }
 
 alias Event = xcb_generic_event_t;
 
-void
-event_loop (xcb_connection_t* c, ref Frame frame) {
-    xcb_generic_event_t* e;
+struct
+Events {
+    xcb_connection_t* c;
+    Event* ev;
+    bool _go = true;
 
-    while ((e = xcb_wait_for_event (c)) != null) {
-        import core.stdc.stdlib : free;
-        log (e);
+    int
+    opApply (int delegate (Event* ev) dg) {
+        while (_go && (ev = xcb_wait_for_event (c)) != null) {
+            import core.stdc.stdlib : free;
+            log (ev);
 
-        //frame.event (e);
-        //frame.update ();
-        //frame.draw ();
+            int result = dg (ev);
+            if (result) {
+                free (ev);
+                return result;
+            }
 
-        free (e);
+            free (ev);
+        }
+
+        return 0;
     }
 }
 
-struct
-Frame {
-    void
-    _init () {
-        //
-    }
-
-    void
-    event (Event e) {
-        //
-    }
-
-    void
-    update () {
-        //
-    }
-
-    void
-    draw () {
-        //
-    }
+void
+draw (xcb_connection_t* c, xcb_screen_t* screen, xcb_window_t hwnd) {
+    //
 }
 
 class 

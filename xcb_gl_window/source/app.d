@@ -13,43 +13,45 @@ void
 main () {
     // INIT
     // Open Xlib Display
-    Display* display;
     int default_screen;
-    new_display (display,default_screen);
+    Display* display = new_display (default_screen);
 
     // CONNECT
     bool auth_flag = true;
-    xcb_connection_t* c;
-    new_connection (auth_flag,/*display,*/default_screen,c);
+    xcb_connection_t* c = new_connection (auth_flag,/*display,*/default_screen);
 
     // Get the first screen
     // screen = xcb_setup_roots_iterator( xcb_get_setup( c ) )[prefered_screen].data;
-    xcb_screen_t* screen;
-    new_screen (c,default_screen,screen);
+    xcb_screen_t* screen = new_screen (c,default_screen);
 
     // Create GL context
     // WINDOW
-    xcb_window_t hwnd;
     GLXDrawable  drawable;
-    new_window (c,display,default_screen,screen,hwnd,drawable);
+    xcb_window_t hwnd = new_window (c,display,default_screen,screen,drawable);
 
     // GL
     init_gl();
 
-    // Init GUI tree
-    auto frame = Frame (display,drawable);
-    frame._init ();
-
     // EVENT LOOP
-    event_loop (c,display,drawable,frame);
+    foreach (Event* ev; Events (c)) {
+        switch (ev.response_type & ~0x80) {
+            case XCB_KEY_PRESS:
+                break;
+            case XCB_EXPOSE:
+                draw (c,screen,hwnd,display,drawable);
+                break;
+            default:
+        }
+    }
 
     //
     xcb_disconnect (c);
 }
 
 
-void
-new_connection (bool auth_flag, /*Display* display, */int default_screen, ref xcb_connection_t* c) {
+xcb_connection_t*
+new_connection (bool auth_flag, /*Display* display, */int default_screen) {
+    xcb_connection_t* c;
     //c = XGetXCBConnection (default_screen);
     //XSetEventQueueOwner (display,XEventQueueOwner.XCBOwnsEventQueue);
 //version (_0):  
@@ -71,30 +73,35 @@ new_connection (bool auth_flag, /*Display* display, */int default_screen, ref xc
         if (xcb_connection_has_error (c))
             throw new XCBException ("Cannot open display", c);
     }
-    
+
+    return c;    
 }
 
-void
-new_display (ref Display* display, ref int default_screen) {
-    display = XOpenDisplay (null);
+Display* 
+new_display (ref int default_screen) {
+    Display* display = XOpenDisplay (null);
 
     if (!display)
         throw new Exception ("Can't open display");
 
     default_screen = DefaultScreen (display);
+
+    return display;
 }
 
-void
-new_screen (xcb_connection_t* c, int default_screen, ref xcb_screen_t* screen) {
+xcb_screen_t*
+new_screen (xcb_connection_t* c, int default_screen) {
     xcb_screen_iterator_t screen_iter = 
         xcb_setup_roots_iterator (xcb_get_setup (c));
 
     for (int screen_num = default_screen; screen_iter.rem && screen_num > 0; screen_num--, xcb_screen_next (&screen_iter)) 
         {}
-    screen = screen_iter.data;
+    xcb_screen_t* screen = screen_iter.data;
 
     //screen = xcb_setup_roots_iterator (xcb_get_setup (c)).data;
     log ( "Screen: width x height (in pixels): ", screen.width_in_pixels, "x", screen.height_in_pixels );    
+
+    return screen;
 }
 
 void
@@ -108,8 +115,8 @@ init_gl () {
 }
 
 
-void
-new_window (xcb_connection_t* c, Display* display, int default_screen, xcb_screen_t* screen, ref xcb_window_t hwnd, ref GLXDrawable drawable) {
+xcb_window_t
+new_window (xcb_connection_t* c, Display* display, int default_screen, xcb_screen_t* screen, ref GLXDrawable drawable) {
     // 1.
     static int[] 
     visual_attribs = [
@@ -165,7 +172,7 @@ new_window (xcb_connection_t* c, Display* display, int default_screen, xcb_scree
     );
 
     // Ask for our window's Id
-    hwnd = xcb_generate_id (c);
+    xcb_window_t hwnd = xcb_generate_id (c);
 
     //
     immutable(uint)   eventmask =
@@ -222,60 +229,45 @@ new_window (xcb_connection_t* c, Display* display, int default_screen, xcb_scree
         throw new Exception ("glXMakeContextCurrent failed");
 
     // Make sure commands are sent before we pause, so window is shown
+
+    return hwnd;
 }
 
 
-void
-event_loop (xcb_connection_t* c, Display* display, GLXDrawable drawable, ref Frame frame) {
-    xcb_generic_event_t* e;
-
-    while ((e = xcb_wait_for_event (c)) != null) {
-        log (e);
-
-        frame.event (e);
-        frame.update ();
-
-        import core.stdc.stdlib : free;
-        free (e);
-    }
-}
-
-alias Event = xcb_generic_event_t*;
+alias Event = xcb_generic_event_t;
 
 struct
-Frame {
-    Display*    display;
-    GLXDrawable drawable;
+Events {
+    xcb_connection_t* c;
+    Event* ev;
+    bool _go = true;
 
-    void
-    _init () {
-        //
-    }
+    int
+    opApply (int delegate (Event* ev) dg) {
+        while (_go && (ev = xcb_wait_for_event (c)) != null) {
+            import core.stdc.stdlib : free;
+            log (ev);
 
-    void
-    event (Event e) {
-        switch (e.response_type & ~0x80) {
-            case XCB_KEY_PRESS:
-                break;
-            case XCB_EXPOSE:
-                draw ();
-                break;
-            default:
+            int result = dg (ev);
+            if (result) {
+                free (ev);
+                return result;
+            }
+
+            free (ev);
         }
-    }
 
-    void
-    update () {
-        //
-    }
-
-    void
-    draw () {
-        glClearColor (0.2, 0.4, 0.9, 1.0);
-        glClear (GL_COLOR_BUFFER_BIT);
-        glXSwapBuffers (display,drawable);
+        return 0;
     }
 }
+
+void
+draw (xcb_connection_t* c, xcb_screen_t* screen, xcb_window_t hwnd, Display* display, GLXDrawable drawable) {
+    glClearColor (0.2, 0.4, 0.9, 1.0);
+    glClear (GL_COLOR_BUFFER_BIT);
+    glXSwapBuffers (display,drawable);
+}
+
 
 class 
 XCBException : Exception {
