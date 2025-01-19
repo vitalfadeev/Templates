@@ -37,6 +37,8 @@ init_sdl () {
     }
 
     loadSDL ("sdl2.dll");
+
+    SDL_Init (SDL_INIT_EVERYTHING);
 }
 
 
