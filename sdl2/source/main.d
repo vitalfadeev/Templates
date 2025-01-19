@@ -36,9 +36,22 @@ init_sdl () {
             throw new Exception ("One or more symbols failed to load. The likely cause is that the shared library is for a lower version than bindbc-sdl was configured to load (via SDL_204, GLFW_2010 etc.)");
     }
 
-    loadSDL ("sdl2.dll");
+    version (Windows)
+        loadSDL ("sdl2.dll");
 
     SDL_Init (SDL_INIT_EVERYTHING);
+
+    // IMG
+    version (SDL_Image) {    
+        auto sdlimage_ret = loadSDLImage ();
+        writeln ("SDL_Image: ", sdlimage_ret);
+        if (sdlimage_ret < sdlImageSupport) // 2.6.3
+            throw new Exception ("The SDL_Image shared library failed to load");
+
+        auto flags = IMG_INIT_PNG; // | IMG_INIT_JPG;
+        if (IMG_Init (flags) != flags)
+            throw new Exception ("The SDL_Image init failed");
+    }
 }
 
 
