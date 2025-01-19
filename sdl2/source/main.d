@@ -51,6 +51,9 @@ init_sdl () {
         auto flags = IMG_INIT_PNG; // | IMG_INIT_JPG;
         if (IMG_Init (flags) != flags)
             throw new Exception ("The SDL_Image init failed");
+
+        // import bindbc.sdl.image;
+        // IMG_Load (name);
     }
 }
 
