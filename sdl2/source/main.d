@@ -26,7 +26,10 @@ main () {
 //
 void 
 init_sdl () {
-    SDLSupport ret = loadSDL();
+    version (Windows)
+        SDLSupport ret = loadSDL ("sdl2.dll");
+    else
+        SDLSupport ret = loadSDL();
 
     if (ret != sdlSupport) {
         if (ret == SDLSupport.noLibrary) 
@@ -35,9 +38,6 @@ init_sdl () {
         if (ret == SDLSupport.badLibrary) 
             throw new Exception ("One or more symbols failed to load. The likely cause is that the shared library is for a lower version than bindbc-sdl was configured to load (via SDL_204, GLFW_2010 etc.)");
     }
-
-    version (Windows)
-        loadSDL ("sdl2.dll");
 
     SDL_Init (SDL_INIT_EVERYTHING);
 
