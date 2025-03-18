@@ -3,7 +3,6 @@ all:
 
 clean:
 	rm -rf .dub
-	rm -f *.exe
 	rm -f *.pdb
 	rm -f mixins.d
 	rm -f dub.selections.json

@@ -7,6 +7,6 @@
 	"dependencies" : {
 		"bindbc-sdl"   : "~>1.2.3"
 	},
-	"versions"     : ["SDL_2022"],
+	"versions"     : ["SDL_2_26", "SDL_Image_2_6", "SDL_TTF_2_20"],
 	"dflags"       : [ "-mixin=mixins.d" ],
 }
