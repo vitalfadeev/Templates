@@ -5,8 +5,12 @@
 	"copyright"    : "Copyright © 2022, vital",
 	"license"      : "proprietary",
 	"dependencies" : {
-		"bindbc-sdl"   : "~>1.2.3"
+		"bindbc-sdl"    : {"path": "./deps/bindbc-sdl"},
+		"bindbc-common" : {"path": "./deps/bindbc-common"},
+		"bindbc-loader" : {"path": "./deps/bindbc-loader"},
+		"bindbc-sdlgfx" : {"path": "./deps/bindbc-sdlgfx"},
 	},
 	"versions"     : ["SDL_2_26", "SDL_Image_2_6", "SDL_TTF_2_20"],
 	"dflags"       : [ "-mixin=mixins.d" ],
+	"buildOptions" : ["ignoreDeprecations"],
 }

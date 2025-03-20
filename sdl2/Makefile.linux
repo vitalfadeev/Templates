@@ -7,3 +7,4 @@ clean:
 	rm -f mixins.d
 	rm -f dub.selections.json
 	rm -f ./g
+	./4-clear-deps.sh

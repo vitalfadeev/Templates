@@ -1,0 +1,65 @@
+{
+	"authors": [
+		"Aya Partridge",
+		"Mike Parker"
+	],
+	"configurations": [
+		{
+			"dependencies": {
+				"bindbc-loader": "~>1.1.0"
+			},
+			"name": "dynamic",
+			"targetType": "staticLibrary"
+		},
+		{
+			"buildOptions": [
+				"betterC"
+			],
+			"dependencies": {
+				"bindbc-loader": "~>1.1.0"
+			},
+			"name": "dynamicBC",
+			"subConfigurations": {
+				"bindbc-common": "yesBC",
+				"bindbc-loader": "yesBC"
+			},
+			"targetType": "staticLibrary"
+		},
+		{
+			"name": "static",
+			"targetType": "staticLibrary",
+			"versions": [
+				"BindSDL_Static"
+			]
+		},
+		{
+			"buildOptions": [
+				"betterC"
+			],
+			"name": "staticBC",
+			"subConfigurations": {
+				"bindbc-common": "yesBC"
+			},
+			"targetType": "staticLibrary",
+			"versions": [
+				"BindSDL_Static"
+			]
+		}
+	],
+	"dependencies": {
+		"bindbc-common": "~>0.1.1"
+	},
+	"description": "Static & dynamic bindings to SDL2 & the SDL_* libraries, compatible with BetterC, @nogc, and nothrow.",
+	"importPaths": [
+		"source/"
+	],
+	"license": "BSL-1.0",
+	"name": "bindbc-sdl",
+	"sourcePaths": [
+		"source/"
+	],
+	"targetName": "BindBC_SDL",
+	"targetPath": "lib",
+	"targetType": "staticLibrary",
+	"version": "1.4.8"
+}

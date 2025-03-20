@@ -1,0 +1,17 @@
+.dub
+dub.selections.json
+docs.json
+__dummy.html
+docs/
+/bindbc-sdlgfx
+bindbc-sdlgfx.so
+bindbc-sdlgfx.dylib
+bindbc-sdlgfx.dll
+bindbc-sdlgfx.a
+bindbc-sdlgfx.lib
+bindbc-sdlgfx-test-*
+*.exe
+*.o
+*.obj
+*.lst
+*.lib

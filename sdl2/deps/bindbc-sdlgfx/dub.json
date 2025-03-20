@@ -1,0 +1,58 @@
+{
+	"authors": [
+		"Ferhat Kurtulmuş"
+	],
+	"configurations": [
+		{
+			"name": "dynamic",
+			"targetType": "staticLibrary"
+		},
+		{
+			"dependencies": {
+				"bindbc-loader": "~>0.1.0"
+			},
+			"dflags": [
+				"-betterC"
+			],
+			"name": "dynamicBC",
+			"subConfigurations": {
+				"bindbc-loader": "yesBC"
+			},
+			"targetType": "staticLibrary"
+		},
+		{
+			"name": "static",
+			"targetType": "staticLibrary",
+			"versions": [
+				"BindSDLgfx_Static"
+			]
+		},
+		{
+			"dflags": [
+				"-betterC"
+			],
+			"name": "staticBC",
+			"targetType": "staticLibrary",
+			"versions": [
+				"BindSDLgfx_Static"
+			]
+		}
+	],
+	"dependencies": {
+		"bindbc-loader": "~>0.1.0",
+		"bindbc-sdl": "~>0.1.0"
+	},
+	"description": "Dynamic bindings to SDL2_gfx, compatible with -betterC, @nogc, and nothrow.",
+	"importPaths": [
+		"source/"
+	],
+	"license": "Boost",
+	"name": "bindbc-sdlgfx",
+	"sourcePaths": [
+		"source/"
+	],
+	"targetName": "BindBC_SDLgfx",
+	"targetPath": "lib",
+	"targetType": "staticLibrary",
+	"version": "0.0.1"
+}

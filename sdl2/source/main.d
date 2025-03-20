@@ -42,18 +42,27 @@ init_sdl () {
     SDL_Init (SDL_INIT_EVERYTHING);
 
     // IMG
-    version (SDL_Image) {    
+    if (bindSDLImage) {
         auto sdlimage_ret = loadSDLImage ();
-        writeln ("SDL_Image: ", sdlimage_ret);
         if (sdlimage_ret < sdlImageSupport) // 2.6.3
             throw new Exception ("The SDL_Image shared library failed to load");
 
         auto flags = IMG_INIT_PNG; // | IMG_INIT_JPG;
         if (IMG_Init (flags) != flags)
-            throw new Exception ("The SDL_Image init failed");
+            throw new IMGException ("The SDL_Image init failed");
 
-        // import bindbc.sdl.image;
+        // import bindbc.sdl;
         // IMG_Load (name);
+    }
+
+    // TTF
+    if (bindSDLTTF) {
+        auto sdl_ttf_ret = loadSDLTTF (); // SDLTTFSupport
+        if (sdl_ttf_ret < sdlTTFSupport) // 2.0.20
+            throw new TTFException ("The SDL_TTF shared library failed to load:");
+        
+        if (TTF_Init () == -1)
+            throw new TTFException ("Failed to initialise SDL_TTF");
     }
 }
 
@@ -93,6 +102,26 @@ class
 SDLException : Exception {
     this (string msg) {
         super (format!"%s: %s" (SDL_GetError().to!string, msg));
+    }
+}
+
+class 
+TTFException : Exception{
+    this (string s) {
+        import std.string : fromStringz;
+        super (
+            format!"%s: %s"(s, fromStringz(TTF_GetError()))
+        );
+    }
+}
+
+class 
+IMGException : Exception{
+    this (string s) {
+        import std.string : fromStringz;
+        super (
+            format!"%s: %s"(s, fromStringz(IMG_GetError()))
+        );
     }
 }
 
