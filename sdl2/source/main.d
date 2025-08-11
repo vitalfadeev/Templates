@@ -16,9 +16,39 @@ main () {
     SDL_Renderer* renderer = new_renderer (window);
 
     // Event Loop
-    foreach (Event* ev; Events ())
-        if (event (ev, window, renderer) == 1)
-            break;
+    foreach (ref Event ev; Events ())
+        switch (ev.type) {
+            case SDL_QUIT:
+                return 0;
+            case SDL_MOUSEBUTTONDOWN:
+                // ...
+                break;
+            case SDL_WINDOWEVENT:
+                switch (ev.window.event) {
+                    case SDL_WINDOWEVENT_EXPOSED: draw (renderer); break; // event.window.windowID
+                    case SDL_WINDOWEVENT_SHOWN: break;        // event.window.windowID
+                    case SDL_WINDOWEVENT_HIDDEN: break;       // event.window.windowID
+                    case SDL_WINDOWEVENT_MOVED: break;        // event.window.windowID event.window.data1 event.window.data2 (x y)
+                    case SDL_WINDOWEVENT_RESIZED: break;      // event.window.windowID event.window.data1 event.window.data2 (width height)
+                    case SDL_WINDOWEVENT_SIZE_CHANGED: break; // event.window.windowID event.window.data1 event.window.data2 (width height)
+                    case SDL_WINDOWEVENT_MINIMIZED: break;    // event.window.windowID
+                    case SDL_WINDOWEVENT_MAXIMIZED: break;    // event.window.windowID
+                    case SDL_WINDOWEVENT_RESTORED: break;     // event.window.windowID
+                    case SDL_WINDOWEVENT_ENTER: break;        // event.window.windowID
+                    case SDL_WINDOWEVENT_LEAVE: break;        // event.window.windowID
+                    case SDL_WINDOWEVENT_FOCUS_GAINED: break; // event.window.windowID
+                    case SDL_WINDOWEVENT_FOCUS_LOST: break;   // event.window.windowID
+                    case SDL_WINDOWEVENT_CLOSE: break;        // event.window.windowID
+                    case SDL_WINDOWEVENT_TAKE_FOCUS: break;   // event.window.windowID
+                    case SDL_WINDOWEVENT_HIT_TEST: break;     // event.window.windowID
+                    default:
+                        SDL_Log ("Window %d got unknown event %d",
+                            ev.window.windowID, ev.window.event);
+                }
+                break;
+            default:
+                writeln (ev);
+        }
 
     return 0;
 }
@@ -128,63 +158,20 @@ IMGException : Exception{
 
 struct
 Events {
-    bool _go = true;
-    Event ev;
+    Event front;
 
-    int
-    opApply (int delegate (Event* ev) dg) {
-        while (_go) {
-            while (SDL_WaitEvent (&ev) > 0) {
-                int result = dg (&ev);
-                if (result)
-                    return result;
-            }
-        }        
+    bool 
+    empty () {
+        return (SDL_WaitEvent (&front) <= 0);
+    }
 
-        return 0;
+    void
+    popFront () {
+        //
     }
 }
 
 alias Event = SDL_Event;
-
-
-int
-event (Event* ev, SDL_Window* window, SDL_Renderer* renderer) {
-    switch (ev.type) {
-        case SDL_QUIT:
-            return 1;
-            break;
-        case SDL_MOUSEBUTTONDOWN:
-            // ...
-            break;
-        case SDL_WINDOWEVENT:
-            switch (ev.window.event) {
-                case SDL_WINDOWEVENT_EXPOSED: draw (renderer); break; // event.window.windowID
-                case SDL_WINDOWEVENT_SHOWN: break;        // event.window.windowID
-                case SDL_WINDOWEVENT_HIDDEN: break;       // event.window.windowID
-                case SDL_WINDOWEVENT_MOVED: break;        // event.window.windowID event.window.data1 event.window.data2 (x y)
-                case SDL_WINDOWEVENT_RESIZED: break;      // event.window.windowID event.window.data1 event.window.data2 (width height)
-                case SDL_WINDOWEVENT_SIZE_CHANGED: break; // event.window.windowID event.window.data1 event.window.data2 (width height)
-                case SDL_WINDOWEVENT_MINIMIZED: break;    // event.window.windowID
-                case SDL_WINDOWEVENT_MAXIMIZED: break;    // event.window.windowID
-                case SDL_WINDOWEVENT_RESTORED: break;     // event.window.windowID
-                case SDL_WINDOWEVENT_ENTER: break;        // event.window.windowID
-                case SDL_WINDOWEVENT_LEAVE: break;        // event.window.windowID
-                case SDL_WINDOWEVENT_FOCUS_GAINED: break; // event.window.windowID
-                case SDL_WINDOWEVENT_FOCUS_LOST: break;   // event.window.windowID
-                case SDL_WINDOWEVENT_CLOSE: break;        // event.window.windowID
-                case SDL_WINDOWEVENT_TAKE_FOCUS: break;   // event.window.windowID
-                case SDL_WINDOWEVENT_HIT_TEST: break;     // event.window.windowID
-                default:
-                    SDL_Log ("Window %d got unknown event %d",
-                        ev.window.windowID, ev.window.event);
-            }
-            break;
-        default:
-    }
-
-    return 0;
-}
 
 
 void
