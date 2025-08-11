@@ -30,7 +30,7 @@ main () {
     xcb_window_t hwnd = new_window (c,display,default_screen,screen,drawable);
 
     // GL
-    init_gl();
+    init_gl ();
 
     // EVENT LOOP
     foreach (Event* ev; Events (c)) {
@@ -41,6 +41,7 @@ main () {
                 draw (c,screen,hwnd,display,drawable);
                 break;
             default:
+                log (ev);
         }
     }
 
@@ -239,25 +240,18 @@ alias Event = xcb_generic_event_t;
 struct
 Events {
     xcb_connection_t* c;
-    Event* ev;
-    bool _go = true;
+    Event* front;
 
-    int
-    opApply (int delegate (Event* ev) dg) {
-        while (_go && (ev = xcb_wait_for_event (c)) != null) {
-            import core.stdc.stdlib : free;
-            log (ev);
+    bool
+    empty () {
+        front = xcb_wait_for_event (c);
+        return (front is null);
+    }
 
-            int result = dg (ev);
-            if (result) {
-                free (ev);
-                return result;
-            }
-
-            free (ev);
-        }
-
-        return 0;
+    void
+    popFront  () {
+        import core.stdc.stdlib : free;
+        free (front);
     }
 }
 
