@@ -16,7 +16,7 @@ main () {
     SDL_Renderer* renderer = new_renderer (window);
 
     // Event Loop
-    foreach (ref Event ev; Events ())
+    foreach (Event* ev; events ())
         switch (ev.type) {
             case SDL_QUIT:
                 return 0;
@@ -155,14 +155,25 @@ IMGException : Exception{
     }
 }
 
+auto
+events () {
+    return Events (null);
+}
 
 struct
 Events {
-    Event front;
+    Event  _ev;
+    Event* front;
+
+    @disable this ();
+
+    this (void* _) {
+        front = &_ev;
+    }
 
     bool 
     empty () {
-        return (SDL_WaitEvent (&front) <= 0);
+        return (SDL_WaitEvent (front) <= 0);
     }
 
     void
