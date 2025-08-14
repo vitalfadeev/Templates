@@ -35,3 +35,10 @@ Window, X11 auth, Event loop
 GTK template
 
 Window, Label
+
+## wayland
+
+Wayland template
+
+Window, Event loop
+
