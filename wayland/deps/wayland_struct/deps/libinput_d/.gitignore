@@ -7,6 +7,7 @@ libinput_d.so
 libinput.dylib
 libinput_d.dll
 libinput_d.a
+liblibinput_d
 libinput_d.lib
 libinput_d-test-*
 *.exe

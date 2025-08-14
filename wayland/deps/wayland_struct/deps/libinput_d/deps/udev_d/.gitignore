@@ -7,6 +7,7 @@ udev_d.so
 udev_d.dylib
 udev_d.dll
 udev_d.a
+libudev_d.a
 udev_d.lib
 udev_d-test-*
 *.exe
