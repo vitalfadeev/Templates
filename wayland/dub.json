@@ -1,0 +1,10 @@
+{
+	"name"        : "wayland",
+	"authors"     : ["vf"],
+	"copyright"   : "Copyright © 2025, vf",
+	"description" : "A minimal D application.",
+	"license"     : "proprietary",
+	"dependencies": {
+		"wayland_struct" : { "path":"deps/wayland_struct" }
+	},
+}

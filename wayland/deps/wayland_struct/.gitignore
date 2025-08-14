@@ -1,0 +1,16 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/wayland_struct
+wayland_struct.so
+wayland_struct.dylib
+wayland_struct.dll
+wayland_struct.a
+wayland_struct.lib
+wayland_struct-test-*
+*.exe
+*.pdb
+*.o
+*.obj
+*.lst

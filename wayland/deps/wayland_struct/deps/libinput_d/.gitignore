@@ -1,0 +1,16 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/libinput_d
+libinput_d.so
+libinput.dylib
+libinput_d.dll
+libinput_d.a
+libinput_d.lib
+libinput_d-test-*
+*.exe
+*.o
+*.obj
+*.lst
+dstep

@@ -1,0 +1,9 @@
+{
+	"name"        : "udev_d",
+	"authors"     : ["vf"],
+	"copyright"   : "Copyright © 2025, vf",
+	"description" : "A minimal D application.",
+	"license"     : "proprietary",
+	"libs-posix"  : ["libudev"],
+	"dflags"      : ["-preview=dip1000"]
+}
