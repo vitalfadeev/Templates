@@ -29,12 +29,12 @@ zwp_tablet_manager_v2 {
 
   // Requests
   pragma (inline,true):
-  auto get_tablet_seat (wl_seat* seat) { return cast (zwp_tablet_seat_v2*) wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.get_tablet_seat, /* ret interface: */ &zwp_tablet_seat_v2_interface, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , null,seat); }
-  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
+  auto get_tablet_seat (wl_seat* seat) { return cast (zwp_tablet_seat_v2*) wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.get_tablet_seat, /* ret interface: */ &zwp_tablet_seat_v2_interface, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , null,seat); }
+  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
 
   // Opcodes
   enum
-  opcode : uint {
+  Opcode : uint {
     get_tablet_seat = 0,
     destroy = 1,
   }
@@ -67,7 +67,7 @@ zwp_tablet_seat_v2 {
 
   // Requests
   pragma (inline,true):
-  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
+  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
 
   // Events
   struct
@@ -107,7 +107,7 @@ zwp_tablet_seat_v2 {
 
   // Opcodes
   enum
-  opcode : uint {
+  Opcode : uint {
     destroy = 0,
   }
 
@@ -143,8 +143,8 @@ zwp_tablet_tool_v2 {
 
   // Requests
   pragma (inline,true):
-  auto set_cursor (uint serial, wl_surface* surface, int hotspot_x, int hotspot_y) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.set_cursor, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , serial,surface,hotspot_x,hotspot_y); }
-  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
+  auto set_cursor (uint serial, wl_surface* surface, int hotspot_x, int hotspot_y) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.set_cursor, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , serial,surface,hotspot_x,hotspot_y); }
+  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
 
   // Events
   struct
@@ -328,7 +328,7 @@ zwp_tablet_tool_v2 {
 
   // Enums
   enum
-  type_ {
+  Type {
     pen = 0x140,
     eraser = 0x141,
     brush = 0x142,
@@ -339,7 +339,7 @@ zwp_tablet_tool_v2 {
     lens = 0x147,
   }
   enum
-  capability_ {
+  Capability {
     tilt = 1,
     pressure = 2,
     distance = 3,
@@ -348,18 +348,18 @@ zwp_tablet_tool_v2 {
     wheel = 6,
   }
   enum
-  button_state_ {
+  Button_state {
     released = 0,
     pressed = 1,
   }
   enum
-  error_ {
+  Error {
     role = 0,
   }
 
   // Opcodes
   enum
-  opcode : uint {
+  Opcode : uint {
     set_cursor = 0,
     destroy = 1,
   }
@@ -430,7 +430,7 @@ zwp_tablet_v2 {
 
   // Requests
   pragma (inline,true):
-  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
+  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
 
   // Events
   struct
@@ -497,7 +497,7 @@ zwp_tablet_v2 {
 
   // Enums
   enum
-  bustype_ {
+  Bustype {
     usb = 3,
     bluetooth = 5,
     virtual = 6,
@@ -507,7 +507,7 @@ zwp_tablet_v2 {
 
   // Opcodes
   enum
-  opcode : uint {
+  Opcode : uint {
     destroy = 0,
   }
 
@@ -549,8 +549,8 @@ zwp_tablet_pad_ring_v2 {
 
   // Requests
   pragma (inline,true):
-  auto set_feedback (const(char)* description, uint serial) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.set_feedback, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , description,serial); }
-  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
+  auto set_feedback (const(char)* description, uint serial) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.set_feedback, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , description,serial); }
+  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
 
   // Events
   struct
@@ -599,13 +599,13 @@ zwp_tablet_pad_ring_v2 {
 
   // Enums
   enum
-  source_ {
+  Source {
     finger = 1,
   }
 
   // Opcodes
   enum
-  opcode : uint {
+  Opcode : uint {
     set_feedback = 0,
     destroy = 1,
   }
@@ -646,8 +646,8 @@ zwp_tablet_pad_strip_v2 {
 
   // Requests
   pragma (inline,true):
-  auto set_feedback (const(char)* description, uint serial) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.set_feedback, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , description,serial); }
-  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
+  auto set_feedback (const(char)* description, uint serial) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.set_feedback, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , description,serial); }
+  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
 
   // Events
   struct
@@ -696,13 +696,13 @@ zwp_tablet_pad_strip_v2 {
 
   // Enums
   enum
-  source_ {
+  Source {
     finger = 1,
   }
 
   // Opcodes
   enum
-  opcode : uint {
+  Opcode : uint {
     set_feedback = 0,
     destroy = 1,
   }
@@ -743,7 +743,7 @@ zwp_tablet_pad_group_v2 {
 
   // Requests
   pragma (inline,true):
-  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
+  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
 
   // Events
   struct
@@ -819,7 +819,7 @@ zwp_tablet_pad_group_v2 {
 
   // Opcodes
   enum
-  opcode : uint {
+  Opcode : uint {
     destroy = 0,
   }
 
@@ -863,8 +863,8 @@ zwp_tablet_pad_v2 {
 
   // Requests
   pragma (inline,true):
-  auto set_feedback (uint button, const(char)* description, uint serial) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.set_feedback, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , button,description,serial); }
-  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
+  auto set_feedback (uint button, const(char)* description, uint serial) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.set_feedback, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , button,description,serial); }
+  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
 
   // Events
   struct
@@ -949,14 +949,14 @@ zwp_tablet_pad_v2 {
 
   // Enums
   enum
-  button_state_ {
+  Button_state {
     released = 0,
     pressed = 1,
   }
 
   // Opcodes
   enum
-  opcode : uint {
+  Opcode : uint {
     set_feedback = 0,
     destroy = 1,
   }
@@ -1005,8 +1005,8 @@ zwp_tablet_pad_dial_v2 {
 
   // Requests
   pragma (inline,true):
-  auto set_feedback (const(char)* description, uint serial) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.set_feedback, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , description,serial); }
-  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
+  auto set_feedback (const(char)* description, uint serial) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.set_feedback, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , description,serial); }
+  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
 
   // Events
   struct
@@ -1037,7 +1037,7 @@ zwp_tablet_pad_dial_v2 {
 
   // Opcodes
   enum
-  opcode : uint {
+  Opcode : uint {
     set_feedback = 0,
     destroy = 1,
   }

@@ -29,18 +29,18 @@ wp_viewporter {
 
   // Requests
   pragma (inline,true):
-  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
-  auto get_viewport (wl_surface* surface) { return cast (wp_viewport*) wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.get_viewport, /* ret interface: */ &wp_viewport_interface, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , null,surface); }
+  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
+  auto get_viewport (wl_surface* surface) { return cast (wp_viewport*) wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.get_viewport, /* ret interface: */ &wp_viewport_interface, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , null,surface); }
 
   // Enums
   enum
-  error_ {
+  Error {
     viewport_exists = 0,
   }
 
   // Opcodes
   enum
-  opcode : uint {
+  Opcode : uint {
     destroy = 0,
     get_viewport = 1,
   }
@@ -73,13 +73,13 @@ wp_viewport {
 
   // Requests
   pragma (inline,true):
-  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
-  auto set_source (wl_fixed_t x, wl_fixed_t y, wl_fixed_t width, wl_fixed_t height) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.set_source, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , x,y,width,height); }
-  auto set_destination (int width, int height) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.set_destination, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , width,height); }
+  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
+  auto set_source (wl_fixed_t x, wl_fixed_t y, wl_fixed_t width, wl_fixed_t height) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.set_source, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , x,y,width,height); }
+  auto set_destination (int width, int height) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.set_destination, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , width,height); }
 
   // Enums
   enum
-  error_ {
+  Error {
     bad_value = 0,
     bad_size = 1,
     out_of_buffer = 2,
@@ -88,7 +88,7 @@ wp_viewport {
 
   // Opcodes
   enum
-  opcode : uint {
+  Opcode : uint {
     destroy = 0,
     set_source = 1,
     set_destination = 2,

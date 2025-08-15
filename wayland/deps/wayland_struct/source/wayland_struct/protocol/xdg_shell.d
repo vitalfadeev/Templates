@@ -29,10 +29,10 @@ xdg_wm_base {
 
   // Requests
   pragma (inline,true):
-  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
-  auto create_positioner () { return cast (xdg_positioner*) wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.create_positioner, /* ret interface: */ &xdg_positioner_interface, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , null); }
-  auto get_xdg_surface (wl_surface* surface) { return cast (xdg_surface*) wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.get_xdg_surface, /* ret interface: */ &xdg_surface_interface, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , null,surface); }
-  auto pong (uint serial) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.pong, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , serial); }
+  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
+  auto create_positioner () { return cast (xdg_positioner*) wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.create_positioner, /* ret interface: */ &xdg_positioner_interface, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , null); }
+  auto get_xdg_surface (wl_surface* surface) { return cast (xdg_surface*) wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.get_xdg_surface, /* ret interface: */ &xdg_surface_interface, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , null,surface); }
+  auto pong (uint serial) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.pong, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , serial); }
 
   // Events
   struct
@@ -54,7 +54,7 @@ xdg_wm_base {
 
   // Enums
   enum
-  error_ {
+  Error {
     role = 0,
     defunct_surfaces = 1,
     not_the_topmost_popup = 2,
@@ -66,7 +66,7 @@ xdg_wm_base {
 
   // Opcodes
   enum
-  opcode : uint {
+  Opcode : uint {
     destroy = 0,
     create_positioner = 1,
     get_xdg_surface = 2,
@@ -107,24 +107,24 @@ xdg_positioner {
 
   // Requests
   pragma (inline,true):
-  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
-  auto set_size (int width, int height) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.set_size, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , width,height); }
-  auto set_anchor_rect (int x, int y, int width, int height) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.set_anchor_rect, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , x,y,width,height); }
-  auto set_anchor (uint anchor) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.set_anchor, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , anchor); }
-  auto set_gravity (uint gravity) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.set_gravity, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , gravity); }
-  auto set_constraint_adjustment (uint constraint_adjustment) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.set_constraint_adjustment, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , constraint_adjustment); }
-  auto set_offset (int x, int y) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.set_offset, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , x,y); }
-  auto set_reactive () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.set_reactive, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ ); }
-  auto set_parent_size (int parent_width, int parent_height) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.set_parent_size, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , parent_width,parent_height); }
-  auto set_parent_configure (uint serial) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.set_parent_configure, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , serial); }
+  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
+  auto set_size (int width, int height) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.set_size, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , width,height); }
+  auto set_anchor_rect (int x, int y, int width, int height) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.set_anchor_rect, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , x,y,width,height); }
+  auto set_anchor (uint anchor) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.set_anchor, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , anchor); }
+  auto set_gravity (uint gravity) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.set_gravity, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , gravity); }
+  auto set_constraint_adjustment (uint constraint_adjustment) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.set_constraint_adjustment, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , constraint_adjustment); }
+  auto set_offset (int x, int y) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.set_offset, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , x,y); }
+  auto set_reactive () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.set_reactive, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ ); }
+  auto set_parent_size (int parent_width, int parent_height) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.set_parent_size, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , parent_width,parent_height); }
+  auto set_parent_configure (uint serial) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.set_parent_configure, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , serial); }
 
   // Enums
   enum
-  error_ {
+  Error {
     invalid_input = 0,
   }
   enum
-  anchor_ {
+  Anchor {
     none = 0,
     top = 1,
     bottom = 2,
@@ -136,7 +136,7 @@ xdg_positioner {
     bottom_right = 8,
   }
   enum
-  gravity_ {
+  Gravity {
     none = 0,
     top = 1,
     bottom = 2,
@@ -148,7 +148,7 @@ xdg_positioner {
     bottom_right = 8,
   }
   enum
-  constraint_adjustment_ {
+  Constraint_adjustment {
     none = 0,
     slide_x = 1,
     slide_y = 2,
@@ -160,7 +160,7 @@ xdg_positioner {
 
   // Opcodes
   enum
-  opcode : uint {
+  Opcode : uint {
     destroy = 0,
     set_size = 1,
     set_anchor_rect = 2,
@@ -217,11 +217,11 @@ xdg_surface {
 
   // Requests
   pragma (inline,true):
-  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
-  auto get_toplevel () { return cast (xdg_toplevel*) wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.get_toplevel, /* ret interface: */ &xdg_toplevel_interface, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , null); }
-  auto get_popup (xdg_surface* parent, xdg_positioner* positioner) { return cast (xdg_popup*) wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.get_popup, /* ret interface: */ &xdg_popup_interface, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , null,parent,positioner); }
-  auto set_window_geometry (int x, int y, int width, int height) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.set_window_geometry, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , x,y,width,height); }
-  auto ack_configure (uint serial) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.ack_configure, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , serial); }
+  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
+  auto get_toplevel () { return cast (xdg_toplevel*) wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.get_toplevel, /* ret interface: */ &xdg_toplevel_interface, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , null); }
+  auto get_popup (xdg_surface* parent, xdg_positioner* positioner) { return cast (xdg_popup*) wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.get_popup, /* ret interface: */ &xdg_popup_interface, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , null,parent,positioner); }
+  auto set_window_geometry (int x, int y, int width, int height) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.set_window_geometry, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , x,y,width,height); }
+  auto ack_configure (uint serial) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.ack_configure, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , serial); }
 
   // Events
   struct
@@ -243,7 +243,7 @@ xdg_surface {
 
   // Enums
   enum
-  error_ {
+  Error {
     not_constructed = 1,
     already_constructed = 2,
     unconfigured_buffer = 3,
@@ -254,7 +254,7 @@ xdg_surface {
 
   // Opcodes
   enum
-  opcode : uint {
+  Opcode : uint {
     destroy = 0,
     get_toplevel = 1,
     get_popup = 2,
@@ -298,20 +298,20 @@ xdg_toplevel {
 
   // Requests
   pragma (inline,true):
-  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
-  auto set_parent (xdg_toplevel* parent) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.set_parent, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , parent); }
-  auto set_title (const(char)* title) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.set_title, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , title); }
-  auto set_app_id (const(char)* app_id) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.set_app_id, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , app_id); }
-  auto show_window_menu (wl_seat* seat, uint serial, int x, int y) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.show_window_menu, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , seat,serial,x,y); }
-  auto move (wl_seat* seat, uint serial) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.move, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , seat,serial); }
-  auto resize (wl_seat* seat, uint serial, uint edges) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.resize, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , seat,serial,edges); }
-  auto set_max_size (int width, int height) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.set_max_size, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , width,height); }
-  auto set_min_size (int width, int height) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.set_min_size, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , width,height); }
-  auto set_maximized () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.set_maximized, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ ); }
-  auto unset_maximized () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.unset_maximized, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ ); }
-  auto set_fullscreen (wl_output* output) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.set_fullscreen, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , output); }
-  auto unset_fullscreen () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.unset_fullscreen, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ ); }
-  auto set_minimized () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.set_minimized, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ ); }
+  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
+  auto set_parent (xdg_toplevel* parent) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.set_parent, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , parent); }
+  auto set_title (const(char)* title) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.set_title, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , title); }
+  auto set_app_id (const(char)* app_id) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.set_app_id, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , app_id); }
+  auto show_window_menu (wl_seat* seat, uint serial, int x, int y) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.show_window_menu, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , seat,serial,x,y); }
+  auto move (wl_seat* seat, uint serial) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.move, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , seat,serial); }
+  auto resize (wl_seat* seat, uint serial, uint edges) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.resize, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , seat,serial,edges); }
+  auto set_max_size (int width, int height) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.set_max_size, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , width,height); }
+  auto set_min_size (int width, int height) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.set_min_size, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , width,height); }
+  auto set_maximized () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.set_maximized, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ ); }
+  auto unset_maximized () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.unset_maximized, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ ); }
+  auto set_fullscreen (wl_output* output) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.set_fullscreen, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , output); }
+  auto unset_fullscreen () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.unset_fullscreen, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ ); }
+  auto set_minimized () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.set_minimized, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ ); }
 
   // Events
   struct
@@ -360,13 +360,13 @@ xdg_toplevel {
 
   // Enums
   enum
-  error_ {
+  Error {
     invalid_resize_edge = 0,
     invalid_parent = 1,
     invalid_size = 2,
   }
   enum
-  resize_edge_ {
+  Resize_edge {
     none = 0,
     top = 1,
     bottom = 2,
@@ -378,7 +378,7 @@ xdg_toplevel {
     bottom_right = 10,
   }
   enum
-  state_ {
+  State {
     maximized = 1,
     fullscreen = 2,
     resizing = 3,
@@ -394,7 +394,7 @@ xdg_toplevel {
     constrained_bottom = 13,
   }
   enum
-  wm_capabilities_ {
+  Wm_capabilities {
     window_menu = 1,
     maximize = 2,
     fullscreen = 3,
@@ -403,7 +403,7 @@ xdg_toplevel {
 
   // Opcodes
   enum
-  opcode : uint {
+  Opcode : uint {
     destroy = 0,
     set_parent = 1,
     set_title = 2,
@@ -480,9 +480,9 @@ xdg_popup {
 
   // Requests
   pragma (inline,true):
-  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
-  auto grab (wl_seat* seat, uint serial) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.grab, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , seat,serial); }
-  auto reposition (xdg_positioner* positioner, uint token) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.reposition, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , positioner,token); }
+  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
+  auto grab (wl_seat* seat, uint serial) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.grab, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , seat,serial); }
+  auto reposition (xdg_positioner* positioner, uint token) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.reposition, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , positioner,token); }
 
   // Events
   struct
@@ -522,13 +522,13 @@ xdg_popup {
 
   // Enums
   enum
-  error_ {
+  Error {
     invalid_grab = 0,
   }
 
   // Opcodes
   enum
-  opcode : uint {
+  Opcode : uint {
     destroy = 0,
     grab = 1,
     reposition = 2,

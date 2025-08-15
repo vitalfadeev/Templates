@@ -29,8 +29,8 @@ wp_presentation {
 
   // Requests
   pragma (inline,true):
-  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
-  auto feedback (wl_surface* surface) { return cast (wp_presentation_feedback*) wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.feedback, /* ret interface: */ &wp_presentation_feedback_interface, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , surface,null); }
+  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
+  auto feedback (wl_surface* surface) { return cast (wp_presentation_feedback*) wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.feedback, /* ret interface: */ &wp_presentation_feedback_interface, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , surface,null); }
 
   // Events
   struct
@@ -52,14 +52,14 @@ wp_presentation {
 
   // Enums
   enum
-  error_ {
+  Error {
     invalid_timestamp = 0,
     invalid_flag = 1,
   }
 
   // Opcodes
   enum
-  opcode : uint {
+  Opcode : uint {
     destroy = 0,
     feedback = 1,
   }
@@ -130,7 +130,7 @@ wp_presentation_feedback {
 
   // Enums
   enum
-  kind_ {
+  Kind {
     vsync = 0x1,
     hw_clock = 0x2,
     hw_completion = 0x4,

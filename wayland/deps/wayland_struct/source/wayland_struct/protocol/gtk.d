@@ -1,3 +1,4 @@
+// Generated with wayland-scanner-d
 // protocol gtk
 module wayland_struct.protocol.gtk;
 
@@ -28,10 +29,10 @@ gtk_shell1 {
 
   // Requests
   pragma (inline,true):
-  auto get_gtk_surface (wl_surface* surface) { return cast (gtk_surface1*) wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.get_gtk_surface, /* ret interface: */ &gtk_surface1_interface, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , null,surface); }
-  auto set_startup_id (const(char)* startup_id) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.set_startup_id, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , startup_id); }
-  auto system_bell (gtk_surface1* surface) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.system_bell, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , surface); }
-  auto notify_launch (const(char)* startup_id) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.notify_launch, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , startup_id); }
+  auto get_gtk_surface (wl_surface* surface) { return cast (gtk_surface1*) wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.get_gtk_surface, /* ret interface: */ &gtk_surface1_interface, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , null,surface); }
+  auto set_startup_id (const(char)* startup_id) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.set_startup_id, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , startup_id); }
+  auto system_bell (gtk_surface1* surface) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.system_bell, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , surface); }
+  auto notify_launch (const(char)* startup_id) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.notify_launch, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , startup_id); }
 
   // Events
   struct
@@ -53,7 +54,7 @@ gtk_shell1 {
 
   // Enums
   enum
-  capability_ {
+  Capability {
     global_app_menu = 1,
     global_menu_bar = 2,
     desktop_icons = 3,
@@ -61,7 +62,7 @@ gtk_shell1 {
 
   // Opcodes
   enum
-  opcode : uint {
+  Opcode : uint {
     get_gtk_surface = 0,
     set_startup_id = 1,
     system_bell = 2,
@@ -102,13 +103,13 @@ gtk_surface1 {
 
   // Requests
   pragma (inline,true):
-  auto set_dbus_properties (const(char)* application_id, const(char)* app_menu_path, const(char)* menubar_path, const(char)* window_object_path, const(char)* application_object_path, const(char)* unique_bus_name) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.set_dbus_properties, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , application_id,app_menu_path,menubar_path,window_object_path,application_object_path,unique_bus_name); }
-  auto set_modal () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.set_modal, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ ); }
-  auto unset_modal () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.unset_modal, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ ); }
-  auto present (uint time) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.present, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , time); }
-  auto request_focus (const(char)* startup_id) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.request_focus, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , startup_id); }
-  auto release () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.release, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
-  auto titlebar_gesture (uint serial, wl_seat* seat, uint gesture) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.titlebar_gesture, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , serial,seat,gesture); }
+  auto set_dbus_properties (const(char)* application_id, const(char)* app_menu_path, const(char)* menubar_path, const(char)* window_object_path, const(char)* application_object_path, const(char)* unique_bus_name) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.set_dbus_properties, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , application_id,app_menu_path,menubar_path,window_object_path,application_object_path,unique_bus_name); }
+  auto set_modal () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.set_modal, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ ); }
+  auto unset_modal () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.unset_modal, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ ); }
+  auto present (uint time) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.present, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , time); }
+  auto request_focus (const(char)* startup_id) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.request_focus, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , startup_id); }
+  auto release () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.release, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
+  auto titlebar_gesture (uint serial, wl_seat* seat, uint gesture) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.titlebar_gesture, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , serial,seat,gesture); }
 
   // Events
   struct
@@ -139,7 +140,7 @@ gtk_surface1 {
 
   // Enums
   enum
-  state_ {
+  State {
     tiled = 1,
     tiled_top = 2,
     tiled_right = 3,
@@ -147,26 +148,26 @@ gtk_surface1 {
     tiled_left = 5,
   }
   enum
-  edge_constraint_ {
+  Edge_constraint {
     resizable_top = 1,
     resizable_right = 2,
     resizable_bottom = 3,
     resizable_left = 4,
   }
   enum
-  gesture_ {
+  Gesture {
     double_click = 1,
     right_click = 2,
     middle_click = 3,
   }
   enum
-  error_ {
+  Error {
     invalid_gesture = 0,
   }
 
   // Opcodes
   enum
-  opcode : uint {
+  Opcode : uint {
     set_dbus_properties = 0,
     set_modal = 1,
     unset_modal = 2,

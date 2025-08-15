@@ -6,14 +6,16 @@ import util;
 
 static const uint WIDTH             = 320;
 static const uint HEIGHT            = 240;
-static const uint PIXEL_FORMAT_ID   = wl_shm.format_.xrgb8888;
+static const uint PIXEL_FORMAT_ID   = wl_shm.Format.xrgb8888;
+alias Draw_cb = void function (wayland_ctx* ctx, uint* pixels);
 
 
 struct
 Wayland {
     wayland_ctx ctx;
 
-    this (int w, int h) {
+    this (int w, int h, Draw_cb draw) {
+        ctx.draw = draw;
         if (!connect ())
             throw new Exception ("Not connected");
         create_surface (w,h);
@@ -133,6 +135,7 @@ wayland_ctx {
 
     Input               input;
     Event               event;
+    Draw_cb             draw;
 
     bool                done;
 
@@ -367,15 +370,15 @@ wl_seat__impl {
     capabilities (void* ctx, wl_seat* _this /* args: */ , uint capabilities) {
         auto _ctx = cast (wayland_ctx*) ctx;
         with (_ctx) {
-            if (capabilities & wl_seat.capability_.keyboard) {
+            if (capabilities & wl_seat.Capability.keyboard) {
                 input.wl_keyboard = wl_seat.get_keyboard ();
                 input.wl_keyboard.add_listener (&input.wl_keyboard.listener,ctx);  // wl_proxy.add_listener
             }
-            if (capabilities & wl_seat.capability_.pointer) {
+            if (capabilities & wl_seat.Capability.pointer) {
                 input.wl_pointer = wl_seat.get_pointer ();
                 input.wl_pointer.add_listener (&input.wl_pointer.listener,ctx);  // wl_proxy.add_listener
             }
-            if (capabilities & wl_seat.capability_.touch) {
+            if (capabilities & wl_seat.Capability.touch) {
                 input.wl_touch = wl_seat.get_touch ();
                 input.wl_touch.add_listener (&input.wl_touch.listener,ctx);  // wl_proxy.add_listener
             }
@@ -910,10 +913,10 @@ Event {
                 //
                 button,  // BTN_LEFT,BTN_RIGHT,BTN_MIDDLE
                 decode_btn (button),
-                cast (wl_pointer.button_state_) state,
+                cast (wl_pointer.Button_state) state,
                 //
-                cast (wl_pointer.axis_source_) axis_source,
-                cast (wl_pointer.axis_) axis,
+                cast (wl_pointer.Axis_source) axis_source,
+                cast (wl_pointer.Axis) axis,
                 // cast (wl_pointer.axis_relative_direction_) axis_direction,
                 axis_value
             ); 
@@ -972,7 +975,7 @@ Event {
                     type, 
                     keyboard.key,  // KEY_1,KEY_ESC,KEY_BACKSPACE
                     keyboard.key.decode_key,
-                    cast (wl_keyboard.key_state_) keyboard.state);
+                    cast (wl_keyboard.Key_state) keyboard.state);
 
             case Type.POINTER_FRAME:
                 return format!"%s: %s" (
@@ -993,12 +996,12 @@ Event {
                     type, 
                     pointer.button,  // BTN_LEFT,BTN_RIGHT,BTN_MIDDLE
                     decode_btn (pointer.button),
-                    cast (wl_pointer.button_state_) pointer.state);
+                    cast (wl_pointer.Button_state) pointer.state);
             case Type.POINTER_AXIS:
                 return format!"%s: %s: %s: %d" (
                     type, 
-                    cast (wl_pointer.axis_source_) pointer.axis_source,
-                    cast (wl_pointer.axis_) pointer.axis,
+                    cast (wl_pointer.Axis_source) pointer.axis_source,
+                    cast (wl_pointer.Axis) pointer.axis,
                     // cast (wl_pointer.axis_relative_direction_) axis_direction,
                     pointer.axis_value);
             case Type.TOUCH_DOWN:

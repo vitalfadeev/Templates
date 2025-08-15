@@ -76,8 +76,8 @@ draw_frame (wayland_ctx* ctx) {
             return null;
         }
 
-        uint* data = cast (uint*) mmap (null, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-        if (data == MAP_FAILED) {
+        uint* pixels = cast (uint*) mmap (null, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+        if (pixels == MAP_FAILED) {
             close (fd);
             return null;
         }
@@ -87,17 +87,10 @@ draw_frame (wayland_ctx* ctx) {
         wl_shm_pool.destroy ();
         close (fd);
 
-        /* Draw checkerboxed background */
-        for (int y = 0; y < height; ++y) {
-            for (int x = 0; x < width; ++x) {
-                if ((x + y / 32 * 32) % 64 < 32)
-                    data[y * width + x] = 0xFF666666;
-                else
-                    data[y * width + x] = 0xFFEEEEEE;
-            }
-        }
+        //
+        draw (ctx,pixels);
 
-        munmap (data, size);
+        munmap (pixels, size);
         wl_buffer.add_listener (&wl_buffer.listener, null);
         return wl_buffer;
     }

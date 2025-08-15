@@ -10,7 +10,7 @@ main () {
     //version (Dynamic) loadWaylandClient ();
 
     // init, connect, surface, window
-    auto wayland = Wayland (640,480);
+    auto wayland = Wayland (640,480,&draw);
 
     // event loop
     foreach (Event* event; wayland.events) {
@@ -29,4 +29,19 @@ main () {
     }
 
     return EXIT_SUCCESS;
+}
+
+void
+draw (wayland_ctx* ctx, uint* pixels /* xrgb8888 */) {
+    // Draw checkerboxed background
+    with (ctx) {
+        for (int y = 0; y < height; ++y) {
+            for (int x = 0; x < width; ++x) {
+                if ((x + y / 32 * 32) % 64 < 32)
+                    pixels[y * width + x] = 0xFF666666;
+                else
+                    pixels[y * width + x] = 0xFFEEEEEE;
+            }
+        }
+    }
 }

@@ -29,10 +29,10 @@ zwp_linux_dmabuf_v1 {
 
   // Requests
   pragma (inline,true):
-  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
-  auto create_params () { return cast (zwp_linux_buffer_params_v1*) wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.create_params, /* ret interface: */ &zwp_linux_buffer_params_v1_interface, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , null); }
-  auto get_default_feedback () { return cast (zwp_linux_dmabuf_feedback_v1*) wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.get_default_feedback, /* ret interface: */ &zwp_linux_dmabuf_feedback_v1_interface, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , null); }
-  auto get_surface_feedback (wl_surface* surface) { return cast (zwp_linux_dmabuf_feedback_v1*) wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.get_surface_feedback, /* ret interface: */ &zwp_linux_dmabuf_feedback_v1_interface, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , null,surface); }
+  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
+  auto create_params () { return cast (zwp_linux_buffer_params_v1*) wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.create_params, /* ret interface: */ &zwp_linux_buffer_params_v1_interface, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , null); }
+  auto get_default_feedback () { return cast (zwp_linux_dmabuf_feedback_v1*) wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.get_default_feedback, /* ret interface: */ &zwp_linux_dmabuf_feedback_v1_interface, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , null); }
+  auto get_surface_feedback (wl_surface* surface) { return cast (zwp_linux_dmabuf_feedback_v1*) wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.get_surface_feedback, /* ret interface: */ &zwp_linux_dmabuf_feedback_v1_interface, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , null,surface); }
 
   // Events
   struct
@@ -63,7 +63,7 @@ zwp_linux_dmabuf_v1 {
 
   // Opcodes
   enum
-  opcode : uint {
+  Opcode : uint {
     destroy = 0,
     create_params = 1,
     get_default_feedback = 2,
@@ -106,10 +106,10 @@ zwp_linux_buffer_params_v1 {
 
   // Requests
   pragma (inline,true):
-  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
-  auto add (int fd, uint plane_idx, uint offset, uint stride, uint modifier_hi, uint modifier_lo) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.add, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , fd,plane_idx,offset,stride,modifier_hi,modifier_lo); }
-  auto create (int width, int height, uint format, uint flags) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.create, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , width,height,format,flags); }
-  auto create_immed (int width, int height, uint format, uint flags) { return cast (wl_buffer*) wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.create_immed, /* ret interface: */ &wl_buffer_interface, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , null,width,height,format,flags); }
+  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
+  auto add (int fd, uint plane_idx, uint offset, uint stride, uint modifier_hi, uint modifier_lo) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.add, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , fd,plane_idx,offset,stride,modifier_hi,modifier_lo); }
+  auto create (int width, int height, uint format, uint flags) {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.create, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , width,height,format,flags); }
+  auto create_immed (int width, int height, uint format, uint flags) { return cast (wl_buffer*) wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.create_immed, /* ret interface: */ &wl_buffer_interface, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ 0 /* request args: */ , null,width,height,format,flags); }
 
   // Events
   struct
@@ -140,7 +140,7 @@ zwp_linux_buffer_params_v1 {
 
   // Enums
   enum
-  error_ {
+  Error {
     already_used = 0,
     plane_idx = 1,
     plane_set = 2,
@@ -151,7 +151,7 @@ zwp_linux_buffer_params_v1 {
     invalid_wl_buffer = 7,
   }
   enum
-  flags_ {
+  Flags {
     y_invert = 1,
     interlaced = 2,
     bottom_first = 4,
@@ -159,7 +159,7 @@ zwp_linux_buffer_params_v1 {
 
   // Opcodes
   enum
-  opcode : uint {
+  Opcode : uint {
     destroy = 0,
     add = 1,
     create = 2,
@@ -202,7 +202,7 @@ zwp_linux_dmabuf_feedback_v1 {
 
   // Requests
   pragma (inline,true):
-  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
+  auto destroy () {  wl_proxy_marshal_flags (cast (wl_proxy*) &this, Opcode.destroy, /* ret interface: */ null, /* version: */ wl_proxy_get_version (cast (wl_proxy *) &this), /* flags: */ WL_MARSHAL_FLAG_DESTROY /* request args: */ ); }
 
   // Events
   struct
@@ -278,13 +278,13 @@ zwp_linux_dmabuf_feedback_v1 {
 
   // Enums
   enum
-  tranche_flags_ {
+  Tranche_flags {
     scanout = 1,
   }
 
   // Opcodes
   enum
-  opcode : uint {
+  Opcode : uint {
     destroy = 0,
   }
 
