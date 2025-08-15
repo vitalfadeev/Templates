@@ -35,9 +35,9 @@ wp_presentation {
   // Events
   struct
   Listener {
-    clock_id_cb clock_id = &_clock_id_impl_default;
+    Clock_id_cb clock_id = &_clock_id_impl_default;
 
-    alias clock_id_cb = extern (C) void function (void* ctx, wp_presentation* _this /* args: */ , uint clk_id);
+    alias Clock_id_cb = extern (C) void function (void* ctx, wp_presentation* _this /* args: */ , uint clk_id);
 
     extern (C)
     static
@@ -95,13 +95,13 @@ wp_presentation_feedback {
   // Events
   struct
   Listener {
-    sync_output_cb sync_output = &_sync_output_impl_default;
-    presented_cb   presented   = &_presented_impl_default;
-    discarded_cb   discarded   = &_discarded_impl_default;
+    Sync_output_cb sync_output = &_sync_output_impl_default;
+    Presented_cb   presented   = &_presented_impl_default;
+    Discarded_cb   discarded   = &_discarded_impl_default;
 
-    alias sync_output_cb = extern (C) void function (void* ctx, wp_presentation_feedback* _this /* args: */ , wl_output* output);
-    alias presented_cb   = extern (C) void function (void* ctx, wp_presentation_feedback* _this /* args: */ , uint tv_sec_hi, uint tv_sec_lo, uint tv_nsec, uint refresh, uint seq_hi, uint seq_lo, uint flags);
-    alias discarded_cb   = extern (C) void function (void* ctx, wp_presentation_feedback* _this /* args: */ );
+    alias Sync_output_cb = extern (C) void function (void* ctx, wp_presentation_feedback* _this /* args: */ , wl_output* output);
+    alias Presented_cb   = extern (C) void function (void* ctx, wp_presentation_feedback* _this /* args: */ , uint tv_sec_hi, uint tv_sec_lo, uint tv_nsec, uint refresh, uint seq_hi, uint seq_lo, uint flags);
+    alias Discarded_cb   = extern (C) void function (void* ctx, wp_presentation_feedback* _this /* args: */ );
 
     extern (C)
     static

@@ -37,9 +37,9 @@ gtk_shell1 {
   // Events
   struct
   Listener {
-    capabilities_cb capabilities = &_capabilities_impl_default;
+    Capabilities_cb capabilities = &_capabilities_impl_default;
 
-    alias capabilities_cb = extern (C) void function (void* ctx, gtk_shell1* _this /* args: */ , uint capabilities);
+    alias Capabilities_cb = extern (C) void function (void* ctx, gtk_shell1* _this /* args: */ , uint capabilities);
 
     extern (C)
     static
@@ -114,11 +114,11 @@ gtk_surface1 {
   // Events
   struct
   Listener {
-    configure_cb       configure       = &_configure_impl_default;
-    configure_edges_cb configure_edges = &_configure_edges_impl_default;
+    Configure_cb       configure       = &_configure_impl_default;
+    Configure_edges_cb configure_edges = &_configure_edges_impl_default;
 
-    alias configure_cb       = extern (C) void function (void* ctx, gtk_surface1* _this /* args: */ , wl_array* states);
-    alias configure_edges_cb = extern (C) void function (void* ctx, gtk_surface1* _this /* args: */ , wl_array* constraints);
+    alias Configure_cb       = extern (C) void function (void* ctx, gtk_surface1* _this /* args: */ , wl_array* states);
+    alias Configure_edges_cb = extern (C) void function (void* ctx, gtk_surface1* _this /* args: */ , wl_array* constraints);
 
     extern (C)
     static

@@ -37,9 +37,9 @@ xdg_wm_base {
   // Events
   struct
   Listener {
-    ping_cb ping = &_ping_impl_default;
+    Ping_cb ping = &_ping_impl_default;
 
-    alias ping_cb = extern (C) void function (void* ctx, xdg_wm_base* _this /* args: */ , uint serial);
+    alias Ping_cb = extern (C) void function (void* ctx, xdg_wm_base* _this /* args: */ , uint serial);
 
     extern (C)
     static
@@ -226,9 +226,9 @@ xdg_surface {
   // Events
   struct
   Listener {
-    configure_cb configure = &_configure_impl_default;
+    Configure_cb configure = &_configure_impl_default;
 
-    alias configure_cb = extern (C) void function (void* ctx, xdg_surface* _this /* args: */ , uint serial);
+    alias Configure_cb = extern (C) void function (void* ctx, xdg_surface* _this /* args: */ , uint serial);
 
     extern (C)
     static
@@ -316,15 +316,15 @@ xdg_toplevel {
   // Events
   struct
   Listener {
-    configure_cb        configure        = &_configure_impl_default;
-    close_cb            close            = &_close_impl_default;
-    configure_bounds_cb configure_bounds = &_configure_bounds_impl_default;
-    wm_capabilities_cb  wm_capabilities  = &_wm_capabilities_impl_default;
+    Configure_cb        configure        = &_configure_impl_default;
+    Close_cb            close            = &_close_impl_default;
+    Configure_bounds_cb configure_bounds = &_configure_bounds_impl_default;
+    Wm_capabilities_cb  wm_capabilities  = &_wm_capabilities_impl_default;
 
-    alias configure_cb        = extern (C) void function (void* ctx, xdg_toplevel* _this /* args: */ , int width, int height, wl_array* states);
-    alias close_cb            = extern (C) void function (void* ctx, xdg_toplevel* _this /* args: */ );
-    alias configure_bounds_cb = extern (C) void function (void* ctx, xdg_toplevel* _this /* args: */ , int width, int height);
-    alias wm_capabilities_cb  = extern (C) void function (void* ctx, xdg_toplevel* _this /* args: */ , wl_array* capabilities);
+    alias Configure_cb        = extern (C) void function (void* ctx, xdg_toplevel* _this /* args: */ , int width, int height, wl_array* states);
+    alias Close_cb            = extern (C) void function (void* ctx, xdg_toplevel* _this /* args: */ );
+    alias Configure_bounds_cb = extern (C) void function (void* ctx, xdg_toplevel* _this /* args: */ , int width, int height);
+    alias Wm_capabilities_cb  = extern (C) void function (void* ctx, xdg_toplevel* _this /* args: */ , wl_array* capabilities);
 
     extern (C)
     static
@@ -487,13 +487,13 @@ xdg_popup {
   // Events
   struct
   Listener {
-    configure_cb    configure    = &_configure_impl_default;
-    popup_done_cb   popup_done   = &_popup_done_impl_default;
-    repositioned_cb repositioned = &_repositioned_impl_default;
+    Configure_cb    configure    = &_configure_impl_default;
+    Popup_done_cb   popup_done   = &_popup_done_impl_default;
+    Repositioned_cb repositioned = &_repositioned_impl_default;
 
-    alias configure_cb    = extern (C) void function (void* ctx, xdg_popup* _this /* args: */ , int x, int y, int width, int height);
-    alias popup_done_cb   = extern (C) void function (void* ctx, xdg_popup* _this /* args: */ );
-    alias repositioned_cb = extern (C) void function (void* ctx, xdg_popup* _this /* args: */ , uint token);
+    alias Configure_cb    = extern (C) void function (void* ctx, xdg_popup* _this /* args: */ , int x, int y, int width, int height);
+    alias Popup_done_cb   = extern (C) void function (void* ctx, xdg_popup* _this /* args: */ );
+    alias Repositioned_cb = extern (C) void function (void* ctx, xdg_popup* _this /* args: */ , uint token);
 
     extern (C)
     static

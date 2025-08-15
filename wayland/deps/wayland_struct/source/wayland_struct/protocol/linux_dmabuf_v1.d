@@ -37,11 +37,11 @@ zwp_linux_dmabuf_v1 {
   // Events
   struct
   Listener {
-    format_cb   format   = &_format_impl_default;
-    modifier_cb modifier = &_modifier_impl_default;
+    Format_cb   format   = &_format_impl_default;
+    Modifier_cb modifier = &_modifier_impl_default;
 
-    alias format_cb   = extern (C) void function (void* ctx, zwp_linux_dmabuf_v1* _this /* args: */ , uint format);
-    alias modifier_cb = extern (C) void function (void* ctx, zwp_linux_dmabuf_v1* _this /* args: */ , uint format, uint modifier_hi, uint modifier_lo);
+    alias Format_cb   = extern (C) void function (void* ctx, zwp_linux_dmabuf_v1* _this /* args: */ , uint format);
+    alias Modifier_cb = extern (C) void function (void* ctx, zwp_linux_dmabuf_v1* _this /* args: */ , uint format, uint modifier_hi, uint modifier_lo);
 
     extern (C)
     static
@@ -114,11 +114,11 @@ zwp_linux_buffer_params_v1 {
   // Events
   struct
   Listener {
-    created_cb created = &_created_impl_default;
-    failed_cb  failed  = &_failed_impl_default;
+    Created_cb created = &_created_impl_default;
+    Failed_cb  failed  = &_failed_impl_default;
 
-    alias created_cb = extern (C) void function (void* ctx, zwp_linux_buffer_params_v1* _this /* args: */ , wl_buffer buffer);
-    alias failed_cb  = extern (C) void function (void* ctx, zwp_linux_buffer_params_v1* _this /* args: */ );
+    alias Created_cb = extern (C) void function (void* ctx, zwp_linux_buffer_params_v1* _this /* args: */ , wl_buffer buffer);
+    alias Failed_cb  = extern (C) void function (void* ctx, zwp_linux_buffer_params_v1* _this /* args: */ );
 
     extern (C)
     static
@@ -207,21 +207,21 @@ zwp_linux_dmabuf_feedback_v1 {
   // Events
   struct
   Listener {
-    done_cb                  done                  = &_done_impl_default;
-    format_table_cb          format_table          = &_format_table_impl_default;
-    main_device_cb           main_device           = &_main_device_impl_default;
-    tranche_done_cb          tranche_done          = &_tranche_done_impl_default;
-    tranche_target_device_cb tranche_target_device = &_tranche_target_device_impl_default;
-    tranche_formats_cb       tranche_formats       = &_tranche_formats_impl_default;
-    tranche_flags_cb         tranche_flags         = &_tranche_flags_impl_default;
+    Done_cb                  done                  = &_done_impl_default;
+    Format_table_cb          format_table          = &_format_table_impl_default;
+    Main_device_cb           main_device           = &_main_device_impl_default;
+    Tranche_done_cb          tranche_done          = &_tranche_done_impl_default;
+    Tranche_target_device_cb tranche_target_device = &_tranche_target_device_impl_default;
+    Tranche_formats_cb       tranche_formats       = &_tranche_formats_impl_default;
+    Tranche_flags_cb         tranche_flags         = &_tranche_flags_impl_default;
 
-    alias done_cb                  = extern (C) void function (void* ctx, zwp_linux_dmabuf_feedback_v1* _this /* args: */ );
-    alias format_table_cb          = extern (C) void function (void* ctx, zwp_linux_dmabuf_feedback_v1* _this /* args: */ , int fd, uint size);
-    alias main_device_cb           = extern (C) void function (void* ctx, zwp_linux_dmabuf_feedback_v1* _this /* args: */ , wl_array* device);
-    alias tranche_done_cb          = extern (C) void function (void* ctx, zwp_linux_dmabuf_feedback_v1* _this /* args: */ );
-    alias tranche_target_device_cb = extern (C) void function (void* ctx, zwp_linux_dmabuf_feedback_v1* _this /* args: */ , wl_array* device);
-    alias tranche_formats_cb       = extern (C) void function (void* ctx, zwp_linux_dmabuf_feedback_v1* _this /* args: */ , wl_array* indices);
-    alias tranche_flags_cb         = extern (C) void function (void* ctx, zwp_linux_dmabuf_feedback_v1* _this /* args: */ , uint flags);
+    alias Done_cb                  = extern (C) void function (void* ctx, zwp_linux_dmabuf_feedback_v1* _this /* args: */ );
+    alias Format_table_cb          = extern (C) void function (void* ctx, zwp_linux_dmabuf_feedback_v1* _this /* args: */ , int fd, uint size);
+    alias Main_device_cb           = extern (C) void function (void* ctx, zwp_linux_dmabuf_feedback_v1* _this /* args: */ , wl_array* device);
+    alias Tranche_done_cb          = extern (C) void function (void* ctx, zwp_linux_dmabuf_feedback_v1* _this /* args: */ );
+    alias Tranche_target_device_cb = extern (C) void function (void* ctx, zwp_linux_dmabuf_feedback_v1* _this /* args: */ , wl_array* device);
+    alias Tranche_formats_cb       = extern (C) void function (void* ctx, zwp_linux_dmabuf_feedback_v1* _this /* args: */ , wl_array* indices);
+    alias Tranche_flags_cb         = extern (C) void function (void* ctx, zwp_linux_dmabuf_feedback_v1* _this /* args: */ , uint flags);
 
     extern (C)
     static
