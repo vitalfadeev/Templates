@@ -1,0 +1,16 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/test_pipewire
+test_pipewire.so
+test_pipewire.dylib
+test_pipewire.dll
+test_pipewire.a
+test_pipewire.lib
+test_pipewire-test-*
+*.exe
+*.pdb
+*.o
+*.obj
+*.lst

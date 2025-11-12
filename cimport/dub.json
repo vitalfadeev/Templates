@@ -1,0 +1,11 @@
+{
+	"name"        : "cimport",
+	"authors"     : ["vf"],
+	"description" : "A minimal D application.",
+	"license"     : "proprietary",
+	"dflags-linux-dmd": ["-P-Ideps/vendor/include"],
+	"dflags-linux-ldc": ["-P-Ideps/vendor/include"],
+	"importPaths-gdc": ["deps/vendor/include"],
+	"libs"        : ["external_lib"],
+	"lflags"      : ["-Ldeps/vendor/lib"]
+}
