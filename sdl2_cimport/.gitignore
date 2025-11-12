@@ -1,0 +1,17 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/sdl2_cimport
+sdl2_cimport.so
+sdl2_cimport.dylib
+sdl2_cimport.dll
+sdl2_cimport.a
+sdl2_cimport.lib
+sdl2_cimport-test-*
+*.exe
+*.pdb
+*.o
+*.obj
+*.lst
+mixins.d
