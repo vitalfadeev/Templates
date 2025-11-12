@@ -4,6 +4,7 @@ import std.format;
 import std.stdio;
 import includes;
 
+
 int 
 main () {
 	init_sdl ();
@@ -21,6 +22,10 @@ main () {
 	            return 0;
 	        case SDL_MOUSEBUTTONDOWN:
 	            // ...
+	            break;
+	        case SDL_KEYDOWN:
+	            if (ev.key.keysym.sym == SDLK_ESCAPE)
+	            	return 0;
 	            break;
 	        case SDL_WINDOWEVENT:
 	            switch (ev.window.event) {
@@ -60,12 +65,9 @@ init_sdl () {
 
     // IMG
     version (SDLImage) {
-        auto flags = IMG_INIT_PNG; // | IMG_INIT_JPG;
+        auto flags = IMG_INIT_PNG | IMG_INIT_JPG;
         if (IMG_Init (flags) != flags)
             throw new IMGException ("The SDL_Image init failed");
-
-        // import bindbc.sdl;
-        // IMG_Load (name);
     }
 
     // TTF
@@ -82,8 +84,8 @@ new_window () {
     SDL_Window* window = 
         SDL_CreateWindow (
             __FILE_FULL_PATH__, // "SDL2 Window",
-            SDL_WINDOWPOS_CENTERED_DISPLAY(0),
-            SDL_WINDOWPOS_CENTERED_DISPLAY(0),
+            SDL_WINDOWPOS_CENTERED_DISPLAY (0),
+            SDL_WINDOWPOS_CENTERED_DISPLAY (0),
             640, 480,
             SDL_WINDOW_VULKAN | 
             SDL_WINDOW_RESIZABLE | 
