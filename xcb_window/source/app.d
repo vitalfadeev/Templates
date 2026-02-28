@@ -20,14 +20,11 @@ main () {
 
     // EVENT LOOP
     foreach (Event* ev; Events (c)) {
+        log (ev);
         switch (ev.response_type & ~0x80) {
-            case XCB_KEY_PRESS:
-                break;
-            case XCB_EXPOSE:
-                draw (c,screen,hwnd);
-                break;
-            default:
-                log (ev);
+            case XCB_KEY_PRESS : break;
+            case XCB_EXPOSE    : _draw (c,screen,hwnd); break;
+            default            :
         }
     }
 
@@ -141,7 +138,7 @@ Events {
 }
 
 void
-draw (xcb_connection_t* c, xcb_screen_t* screen, xcb_window_t hwnd) {
+_draw (xcb_connection_t* c, xcb_screen_t* screen, xcb_window_t hwnd) {
     //
 }
 

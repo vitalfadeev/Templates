@@ -34,14 +34,11 @@ main () {
 
     // EVENT LOOP
     foreach (Event* ev; Events (c)) {
+        log (ev);
         switch (ev.response_type & ~0x80) {
-            case XCB_KEY_PRESS:
-                break;
-            case XCB_EXPOSE:
-                draw (c,screen,hwnd,display,drawable);
-                break;
-            default:
-                log (ev);
+            case XCB_KEY_PRESS : break;
+            case XCB_EXPOSE    : _draw (c,screen,hwnd,display,drawable); break;
+            default            :
         }
     }
 
@@ -256,7 +253,7 @@ Events {
 }
 
 void
-draw (xcb_connection_t* c, xcb_screen_t* screen, xcb_window_t hwnd, Display* display, GLXDrawable drawable) {
+_draw (xcb_connection_t* c, xcb_screen_t* screen, xcb_window_t hwnd, Display* display, GLXDrawable drawable) {
     glClearColor (0.2, 0.4, 0.9, 1.0);
     glClear (GL_COLOR_BUFFER_BIT);
     glXSwapBuffers (display,drawable);

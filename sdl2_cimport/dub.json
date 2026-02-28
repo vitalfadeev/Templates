@@ -3,17 +3,9 @@
 	"authors"          : ["vf"],
 	"description"      : "A minimal D application.",
 	"license"          : "proprietary",
-	"dflags-linux-dmd" : [
-		"-P-I/usr/include/SDL2",
-	],
-	"dflags-linux-ldc" : [
-		"-P-I/usr/include/SDL2",
-	],
-	"importPaths-gdc"  : [
-		"/usr/include/SDL2",
-	],
-	"libs"             : [
-		"sdl2",
-	],
+	"dflags-linux-dmd" : ["-P-I/usr/include/SDL2"],
+	"dflags-linux-ldc" : ["-P-I/usr/include/SDL2"],
+	"importPaths-gdc"  : ["/usr/include/SDL2"],
+	"libs"             : ["sdl2"],
 	"lflags"           : [],
 }

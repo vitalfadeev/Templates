@@ -16,19 +16,22 @@ main () {
 	SDL_Renderer* renderer = new_renderer (window);
 
 	// Event Loop
-	foreach (Event* ev; events ())
-	    switch (ev.type) {
+	foreach (ref evt; Events ()) {
+        log_event (&evt);
+
+        with (SDL_EventType)
+	    switch (evt.type) {
 	        case SDL_QUIT:
 	            return 0;
 	        case SDL_MOUSEBUTTONDOWN:
 	            // ...
 	            break;
 	        case SDL_KEYDOWN:
-	            if (ev.key.keysym.sym == SDLK_ESCAPE)
+	            if (evt.key.keysym.sym == SDLK_ESCAPE)
 	            	return 0;
 	            break;
 	        case SDL_WINDOWEVENT:
-	            switch (ev.window.event) {
+	            switch (evt.window.event) {
 	                case SDL_WINDOWEVENT_EXPOSED: draw (renderer); break; // event.window.windowID
 	                case SDL_WINDOWEVENT_SHOWN: break;        // event.window.windowID
 	                case SDL_WINDOWEVENT_HIDDEN: break;       // event.window.windowID
@@ -47,12 +50,12 @@ main () {
 	                case SDL_WINDOWEVENT_HIT_TEST: break;     // event.window.windowID
 	                default:
 	                    SDL_Log ("Window %d got unknown event %d",
-	                        ev.window.windowID, ev.window.event);
+	                        evt.window.windowID, evt.window.event);
 	            }
 	            break;
 	        default:
-	            writeln (ev);
 	    }
+    }
 
 	return 0;
 }
@@ -139,31 +142,11 @@ IMGException : Exception{
     }
 }
 
-auto
-events () {
-    return Events (null);
-}
-
 struct
 Events {
-    Event  _ev;
-    Event* front;
-
-    @disable this ();
-
-    this (void* _) {
-        front = &_ev;
-    }
-
-    bool 
-    empty () {
-        return (SDL_WaitEvent (front) <= 0);
-    }
-
-    void
-    popFront () {
-        //
-    }
+    Event front;
+    bool  empty () { return (SDL_WaitEvent (&front) <= 0); }
+    void  popFront () {}
 }
 
 alias Event = SDL_Event;
@@ -182,4 +165,28 @@ draw (SDL_Renderer* renderer) {
 
     // Rasterize
     SDL_RenderPresent (renderer);
+}
+
+void
+log_event (Event* evt) {
+    with (SDL_EventType)
+    if (evt.type == SDL_MOUSEMOTION)
+        {}
+    else
+    if (evt.type == SDL_MOUSEWHEEL)
+        writefln ("%s %s", cast (SDL_EventType)evt.type, cast (SDL_MouseWheelDirection) evt.wheel.direction);
+    else
+    if (evt.type == SDL_WINDOWEVENT)
+        writefln ("%s %d %s ", cast (SDL_EventType)evt.type, evt.window.windowID, cast (SDL_WindowEventID) evt.window.event);
+    else
+    if (evt.type == SDL_KEYDOWN)
+        writefln ("%s %s", cast (SDL_EventType)evt.type, evt.key.keysym.scancode);
+    else
+    if (evt.type == SDL_KEYUP)
+        writefln ("%s %s", cast (SDL_EventType)evt.type, evt.key.keysym.scancode);
+    else
+    if (evt.type < SDL_USEREVENT)
+        writefln ("%s", cast (SDL_EventType) evt.type);    
+    else
+        writefln ("%s", cast (SDL_EventType) evt.type);
 }
