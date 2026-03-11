@@ -1,0 +1,11 @@
+{
+	"name"             : "sdl3_cimport",
+	"authors"          : ["vf"],
+	"description"      : "A minimal D application.",
+	"license"          : "proprietary",
+	"dflags-linux-dmd" : ["-P-I/usr/include/SDL3"],
+	"dflags-linux-ldc" : ["-P-I/usr/include/SDL3"],
+	"importPaths-gdc"  : ["/usr/include/SDL3"],
+	"libs"             : ["sdl3"],
+	"lflags"           : [],
+}
